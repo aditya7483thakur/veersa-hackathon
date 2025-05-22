@@ -53,6 +53,8 @@ export const register = async (req, res) => {
 
     // create a doctor if role selected is doctor
     if (role.toLowerCase() === "doctor") {
+
+      
       const description = `Doctor ${name} specializing in ${specialization} sits at ${hospitalName} ${hospitalAddress} ${city} ${state} ${country}`;
 
       const doctor = new Doctor({

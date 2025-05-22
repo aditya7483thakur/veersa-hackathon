@@ -2,8 +2,8 @@ import { StatusBar, View, Text, Image } from 'react-native';
 import { Colors } from '../constants/Colors';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Images } from '../constants/Images';
-import { useEffect } from 'react';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useEffect } from 'react';
 
 const SplashScreen = () => {
     const navigation = useNavigation();
@@ -20,7 +20,7 @@ const SplashScreen = () => {
         setTimeout(() => {
             navigation.replace("intro");
         }, 2000);
-    }, []);
+    }, [navigation]);
 
     return (
     <>
