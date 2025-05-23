@@ -1,4 +1,4 @@
-import { StatusBar, View, Text, Image, Button } from 'react-native';
+import { StatusBar, View, Text, Image } from 'react-native';
 import { Colors } from '../constants/Colors';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Images } from '../constants/Images';
