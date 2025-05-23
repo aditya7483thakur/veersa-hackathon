@@ -20,7 +20,7 @@ const SplashScreen = () => {
         setTimeout(() => {
             navigation.replace("intro");
         }, 2000);
-    }, []);
+    });
 
     return (
     <>
