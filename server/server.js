@@ -4,6 +4,7 @@ import connectDB from "./db/db.js";
 import cors from "cors";
 import bodyParser from "body-parser";
 import authRoutes from "./routes/auth.js";
+import appointmentRoutes from "./routes/appointment.js"
 
 dotenv.config();
 const app = express();
@@ -26,6 +27,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/auth", authRoutes);
+app.use("/appointment",appointmentRoutes)
 
 const PORT = process.env.PORT || 5000;
 app.listen(5000, '0.0.0.0', () => {
