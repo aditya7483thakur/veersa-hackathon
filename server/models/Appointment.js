@@ -26,4 +26,9 @@ const appointmentSchema = mongoose.Schema(
   }
 );
 
+//  Ensure unique combination of doctor, date, and time slot
+appointmentSchema.index(
+  { doctor_id: 1, appointmentDate: 1, timeSlot: 1 },
+  { unique: true }
+);
 export const Appointment = mongoose.model("Appointment", appointmentSchema);
