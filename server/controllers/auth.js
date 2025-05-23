@@ -1,7 +1,6 @@
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
 import { User } from "../models/User.js";
-import { createAccessToken, createRefreshToken } from "../middlewares/token.js";
+import { createAccessToken } from "../middlewares/token.js";
 import { Doctor } from "../models/Doctor.js";
 
 export const register = async (req, res) => {
@@ -53,8 +52,6 @@ export const register = async (req, res) => {
 
     // create a doctor if role selected is doctor
     if (role.toLowerCase() === "doctor") {
-
-      
       const description = `Doctor ${name} specializing in ${specialization} sits at ${hospitalName} ${hospitalAddress} ${city} ${state} ${country}`;
 
       const doctor = new Doctor({
@@ -105,10 +102,6 @@ export const login = async (req, res) => {
     }
 
     const accessToken = createAccessToken(user);
-    const refreshToken = createRefreshToken(user);
-
-    user.refreshToken = refreshToken;
-    await user.save();
 
     let userObj = user.toObject(); // Convert user document to plain object
 
@@ -125,7 +118,6 @@ export const login = async (req, res) => {
 
     res.status(200).json({
       accessToken,
-      refreshToken,
       user: {
         id: userObj._id,
         name: userObj.name,
@@ -151,59 +143,5 @@ export const login = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Error Logging In" });
-  }
-};
-
-// function that handles refresh, manages session by checking refresh token and returning access token based on conditions
-export const refresh = async (req, res) => {
-  try {
-    const { refreshToken } = req.headers;
-
-    if (!refreshToken) {
-      return res.status(403).json({ message: "User Not Authenticated" });
-    }
-
-    const decoded = jwt.verify(
-      refreshToken,
-      process.env.EXPO_PUBLIC_REFRESH_TOKEN_SECRET
-    );
-
-    const user = await User.findById(decoded.userId);
-
-    if (!user) {
-      return res.status(403).json({ message: "User Not Found" });
-    }
-
-    const newToken = createAccessToken(user);
-    const newRefreshToken = createRefreshToken(user);
-
-    user.refreshToken = newRefreshToken;
-    await user.save();
-
-    res.status(200).json({
-      accessToken: newToken,
-      refreshToken: newRefreshToken,
-      message: "Token Refreshed Successfully",
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Error Refreshing Token" });
-  }
-};
-
-// function that handles user logout
-export const logout = async (req, res) => {
-  try {
-    const userId = req.user.userId;
-
-    await User.findByIdAndUpdate(
-      { _id: userId },
-      { $unset: { refreshToken: 1 } }
-    );
-
-    res.status(200).json({ message: "User Logged Out Successfully" });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Error Logging Out" });
   }
 };
