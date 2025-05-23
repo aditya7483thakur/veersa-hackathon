@@ -80,7 +80,7 @@ const doctorSchema = Schema(
     profilePhoto: {
       type: String,
       required: true,
-      default: "/avatar.jpg",
+      default: "https://asset.cloudinary.com/dkhbiyylo/149a6bc0c6f37920569b77e0f245ae9b",
     },
   },
   { strict: false },

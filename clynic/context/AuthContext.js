@@ -12,7 +12,6 @@ export const useAuth = () => {
 const AuthProvider = ({ children }) => {
   const [authState, setAuthState] = useState({
     accessToken: null,
-    refreshToken: null,
     authenticated: false,
   });
 
@@ -21,23 +20,19 @@ const AuthProvider = ({ children }) => {
       const accessToken = await SecureStore.getItemAsync(
         process.env.EXPO_PUBLIC_ACCESS_TOKEN_SECRET
       );
-      const refreshToken = await SecureStore.getItemAsync(
-        process.env.EXPO_PUBLIC_REFRESH_TOKEN_SECRET
-      );
+      
 
-      if (accessToken && refreshToken) {
+      if (accessToken ) {
         axios.defaults.headers.common["Authorization"] =
           `Bearer ${accessToken}`;
 
         setAuthState({
           accessToken,
-          refreshToken,
           authenticated: true,
         });
       } else {
         setAuthState({
           accessToken: null,
-          refreshToken: null,
           authenticated: false,
         });
       }
@@ -45,7 +40,6 @@ const AuthProvider = ({ children }) => {
       console.log("Error loading tokens:", error);
       setAuthState({
         accessToken: null,
-        refreshToken: null,
         authenticated: false,
       });
     }
@@ -62,6 +56,19 @@ const AuthProvider = ({ children }) => {
         {
           ...user,
         }
+      );
+      const { accessToken  } = response.data;
+
+      setAuthState({
+        accessToken,
+        authenticated: true,
+      });
+
+      axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+
+      await SecureStore.setItemAsync(
+        process.env.EXPO_PUBLIC_ACCESS_TOKEN_SECRET,
+        accessToken
       );
       Alert.alert("Success", response.data.message);
     } catch (error) {
@@ -84,13 +91,10 @@ const AuthProvider = ({ children }) => {
         Alert.alert("Error", "Invalid Credentials");
         return;
       }
-
-
-      const { accessToken, refreshToken } = response.data;
+      const { accessToken  } = response.data;
 
       setAuthState({
         accessToken,
-        refreshToken,
         authenticated: true,
       });
 
@@ -100,10 +104,7 @@ const AuthProvider = ({ children }) => {
         process.env.EXPO_PUBLIC_ACCESS_TOKEN_SECRET,
         accessToken
       );
-      await SecureStore.setItemAsync(
-        process.env.EXPO_PUBLIC_REFRESH_TOKEN_SECRET,
-        refreshToken
-      );
+      
 
       return response;
     } catch (error) {
@@ -117,13 +118,10 @@ const AuthProvider = ({ children }) => {
       await SecureStore.deleteItemAsync(
         process.env.EXPO_PUBLIC_ACCESS_TOKEN_SECRET
       );
-      await SecureStore.deleteItemAsync(
-        process.env.EXPO_PUBLIC_REFRESH_TOKEN_SECRET
-      );
+      
       axios.defaults.headers.common["Authorization"] = "";
       setAuthState({
         accessToken: null,
-        refreshToken: null,
         authenticated: false,
       });
 
