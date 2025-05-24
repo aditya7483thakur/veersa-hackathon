@@ -31,14 +31,12 @@ function AppNavigator() {
         {authenticated ? (
           // Authenticated screens
           <>
-            <RootStack.Screen name="home" component={Home} />
+            <RootStack.Screen name="tabs" component={TabLayout} />
             {/* Add other authenticated screens here */}
           </>
         ) : (
           // Unauthenticated screens
           <>
-            <RootStack.Screen name="splash" component={SplashScreen} />
-
             <RootStack.Screen name="onboarding" component={OnboardingScreens} />
             <RootStack.Screen name="auth" component={AuthScreen} />
           </>

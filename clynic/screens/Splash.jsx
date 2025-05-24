@@ -14,7 +14,7 @@ const SplashScreen = () => {
         // 2 seconds load screen
         setTimeout(() => {
             if (authenticated) {
-                navigation.replace("home");
+                navigation.replace("tabs");
             } else {
                 navigation.replace("onboarding");
             }
@@ -25,7 +25,7 @@ const SplashScreen = () => {
         // 2 seconds load screen
         setTimeout(() => {
             if (authenticated) {
-                navigation.replace("home");
+                navigation.replace("tabs");
             } else {
                 navigation.replace("onboarding");
             }
