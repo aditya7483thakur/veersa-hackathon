@@ -1,58 +1,40 @@
-import "./global.css";
+import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import SplashScreen from "./screens/Splash";
-import { NavigationContainer } from "@react-navigation/native";
-import IntroScreen from "./screens/Intro";
+import AppStack from "./screens/AppStack";
+import AuthStack from "./screens/AuthStack";
 import AuthProvider, { useAuth } from "./context/AuthContext";
-import Home from "./screens/Home";
-import AuthScreen from "./screens/auth";
-import LoginScreen from "./components/LoginScreen";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import "./global.css";
 
-// Stack for navigation
-const Stack = createNativeStackNavigator();
+const RootStack = createNativeStackNavigator();
 
 function AppNavigator() {
   const { authenticated } = useAuth();
 
   return (
     <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="splash"
-          component={SplashScreen}
-          options={{ headerShown: false }}
-        />
-
-        <Stack.Screen
-          name="intro"
-          component={IntroScreen}
-          options={{ headerShown: false }}
-        />
-        {authenticated ? (
-          <Stack.Screen
-            name="home"
-            component={Home}
-            options={{ headerShown: false }}
-          />
-        ) : (
-          <Stack.Screen
-            name="auth"
-            component={AuthScreen}
-            options={{ headerShown: false }}
-          />
-        )}
-        <Stack.Screen name="Signin" component={LoginScreen} />
-
-      </Stack.Navigator>
+      <RootStack.Navigator initialRouteName="splash" screenOptions={{ headerShown: false }}>
+          <RootStack.Screen name="splash" component={SplashScreen} />
+        {
+          authenticated ? (
+            <RootStack.Screen name="app" component={AppStack} />
+          ) : (
+            <RootStack.Screen name="auth-wrapper" component={AuthStack} />
+          )
+        }
+      </RootStack.Navigator>
     </NavigationContainer>
   );
 }
 
 const App = () => {
   return (
-    <AuthProvider>
-      <AppNavigator />
-    </AuthProvider>
+    <SafeAreaProvider>
+      <AuthProvider>
+        <AppNavigator />
+      </AuthProvider>
+    </SafeAreaProvider>
   );
 };
 

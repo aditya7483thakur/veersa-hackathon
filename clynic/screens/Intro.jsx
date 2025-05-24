@@ -5,17 +5,17 @@ import { Images } from '../constants/Images';
 import { useAuth } from '../context/AuthContext';
 import { useNavigation } from '@react-navigation/native';
 import { useEffect } from 'react';
+
 const IntroScreen = () => {
     const { authenticated } = useAuth();
     const navigation = useNavigation();
-
 
     useEffect(() => {
         setTimeout(() => {
             if (authenticated) {
                 navigation.replace("home");
             } else {
-                navigation.replace("auth");
+                navigation.replace("onboarding");
             }
         }, 1500);
     }, []);

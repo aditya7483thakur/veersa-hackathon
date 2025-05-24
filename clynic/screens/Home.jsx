@@ -9,8 +9,7 @@ const Home = () => {
       <Text className="text-2xl font-bold mb-4">logged in</Text>
             <TouchableOpacity onPress={logout}>
               <Text>log out</Text>
-            </TouchableOpacity>
-      
+            </TouchableOpacity>  
     </View>
   );
 };

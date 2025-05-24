@@ -1,4 +1,4 @@
-import { StatusBar, View, Text, Image } from 'react-native';
+import { StatusBar, Text, Image } from 'react-native';
 import { Colors } from '../constants/Colors';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Images } from '../constants/Images';
@@ -11,22 +11,30 @@ const SplashScreen = () => {
     useEffect(() => {
         // 2 seconds load screen
         setTimeout(() => {
-            navigation.replace("intro");
+            navigation.replace("auth-wrapper", {
+                screen: "intro"
+            });
         }, 2000);
     }, []);
 
     useFocusEffect(() => {
         // 2 seconds load screen
         setTimeout(() => {
-            navigation.replace("intro");
+            navigation.replace("auth-wrapper", {
+                screen: "intro"
+            });
         }, 2000);
     });
 
     return (
     <>
-        <StatusBar backgroundColor={Colors.black(1)} barStyle={"light-content"} />
+        <StatusBar 
+            backgroundColor="transparent"
+            barStyle="light-content"
+            translucent
+        />
         <SafeAreaView
-            style={{ backgroundColor: Colors.bgColor(0.7)  }}
+            style={{ backgroundColor: Colors.bgColor(0.7), flex: 1, alignItems: "center", justifyContent: "center"  }}
             className="flex-1 items-center justify-center"
         >
             <Image 
