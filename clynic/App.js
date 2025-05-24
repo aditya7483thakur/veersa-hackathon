@@ -1,8 +1,9 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import SplashScreen from "./screens/Splash";
-import AppStack from "./screens/AppStack";
-import AuthStack from "./screens/AuthStack";
+import Home from "./screens/Home";
+import OnboardingScreens from "./components/OnboardingScreens";
+import AuthScreen from "./screens/auth";
 import AuthProvider, { useAuth } from "./context/AuthContext";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import "./global.css";
@@ -10,19 +11,35 @@ import "./global.css";
 const RootStack = createNativeStackNavigator();
 
 function AppNavigator() {
-  const { authenticated } = useAuth();
+  const { authenticated, loading } = useAuth();
+
+  // Show splash while loading
+  if (loading) {
+    return (
+      <NavigationContainer>
+        <RootStack.Navigator screenOptions={{ headerShown: false }}>
+          <RootStack.Screen name="splash" component={SplashScreen} />
+        </RootStack.Navigator>
+      </NavigationContainer>
+    );
+  }
 
   return (
     <NavigationContainer>
-      <RootStack.Navigator initialRouteName="splash" screenOptions={{ headerShown: false }}>
-          <RootStack.Screen name="splash" component={SplashScreen} />
-        {
-          authenticated ? (
-            <RootStack.Screen name="app" component={AppStack} />
-          ) : (
-            <RootStack.Screen name="auth-wrapper" component={AuthStack} />
-          )
-        }
+      <RootStack.Navigator screenOptions={{ headerShown: false }}>
+        {authenticated ? (
+          // Authenticated screens
+          <>
+            <RootStack.Screen name="home" component={Home} />
+            {/* Add other authenticated screens here */}
+          </>
+        ) : (
+          // Unauthenticated screens
+          <>
+            <RootStack.Screen name="onboarding" component={OnboardingScreens} />
+            <RootStack.Screen name="auth" component={AuthScreen} />
+          </>
+        )}
       </RootStack.Navigator>
     </NavigationContainer>
   );
