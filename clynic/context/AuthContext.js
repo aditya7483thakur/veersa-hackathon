@@ -135,6 +135,7 @@ const AuthProvider = ({ children }) => {
     login,
     logout,
     authState,
+    accessToken:authState.accessToken,
     authenticated: authState.authenticated,
     checkAuthStatus,
   };
