@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import {
   Text,
   TextInput,
-  TouchableOpacity,
   Alert,
   ScrollView,
-  StatusBar,
+  StatusBar
 } from 'react-native';
 import { useAuth } from '../context/AuthContext';
 import { useNavigation } from '@react-navigation/native';
+import CustomButton from './CustomButton';
 import { Colors } from '../constants/Colors';
 
 const LoginScreen = () => {
@@ -59,21 +59,17 @@ const LoginScreen = () => {
   };
 
   return (
-    <>
-      <StatusBar 
-          backgroundColor="transparent"
-          barStyle="dark-content"
-          translucent
-      />
       <ScrollView contentContainerStyle={{
         flexGrow: 1,
         justifyContent: 'center',
         padding: 20,
       }} className=" bg-white w-full">
-        <Text className="text-2xl font-bold mb-6 text-center">Login</Text>
+       <Text className="text-3xl font-bold text-center mb-6" style={{ color: Colors.bgColor(0.8) }}>
+          Welcome Back
+        </Text>
 
         <TextInput
-          className="border border-gray-400 rounded-lg p-3 mb-2 text-base"
+          className={`border rounded-lg p-3 mb-3 text-base ${errors.email ? 'border-red-500' : 'border-gray-300'}`}
           placeholder="Email"
           keyboardType="email-address"
           value={form.email}
@@ -82,7 +78,7 @@ const LoginScreen = () => {
         {errors.email && <Text className="text-red-500 mb-2 text-sm">{errors.email}</Text>}
 
         <TextInput
-          className="border border-gray-400 rounded-lg p-3 mb-2 text-base"
+          className={`border rounded-lg p-3 mb-2 text-base ${errors.password ? 'border-red-500' : 'border-gray-300'}`}
           placeholder="Password"
           secureTextEntry
           value={form.password}
@@ -90,17 +86,11 @@ const LoginScreen = () => {
         />
         {errors.password && <Text className="text-red-500 mb-2 text-sm">{errors.password}</Text>}
 
-        <TouchableOpacity
-          className=" py-4 px-6 rounded-lg mt-2"
-          style={{
-            backgroundColor: Colors.bgColor(1), // gray-400 or your bgColor
-          }}
-          onPress={handleSubmit}
-        >
-          <Text className="text-white font-bold text-center">Login</Text>
-        </TouchableOpacity>
+        <CustomButton
+          text={"LOGIN"}
+          handlePress={handleSubmit}
+        />
       </ScrollView>
-    </>
   );
 };
 

@@ -43,12 +43,12 @@ const SplashScreen = () => {
                 resizeMode="contain"
             />
             <Text
-                className="text-3xl font-bold my-4 text-white tracking-wider"
+                className="text-3xl font-bold my-5 text-white tracking-wider"
             >
-                Clynic
+                CLYNIC
             </Text>
             <Text
-                className="text-white my-5"
+                className="text-white font-bold my-10"
             >
                 Your Health, Our Priority
             </Text>

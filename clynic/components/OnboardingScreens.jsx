@@ -1,9 +1,10 @@
-import { TouchableOpacity, Text, Image, StatusBar } from "react-native";
+import { TouchableOpacity, Text, Image, StatusBar, View } from "react-native";
 import Onboarding from "react-native-onboarding-swiper";
 import * as SecureStore from "expo-secure-store";
 import { useNavigation } from "@react-navigation/native";
 import { Images } from "../constants/Images";
 import { Colors } from "../constants/Colors";
+import AntDesign from '@expo/vector-icons/AntDesign';
 
 const OnboardingScreens = () => {
     const navigation = useNavigation();
@@ -79,11 +80,11 @@ const OnboardingScreens = () => {
     const doneButton = ({ ...props }) => (
         <TouchableOpacity>
             <Text
-                className="font-poppins-regular"
-                style={{ fontSize: 16, color: "#333", padding: 20 }}
+                className="font-poppins-regular font-bold"
+                style={{ fontSize: 16, color: Colors.bgColor(0.8), padding: 20 }}
                 {...props}
             >
-                Done
+                Get Started
             </Text>
         </TouchableOpacity>
     );
@@ -102,6 +103,20 @@ const OnboardingScreens = () => {
                 pages={onboardingPages}
                 containerStyles={{ flex: 1, paddingHorizontal: 20 }}
                 DoneButtonComponent={doneButton}
+                bottomBarColor="#fff"
+                nextLabel={
+                    <View 
+                        style={{ backgroundColor: Colors.bgColor(0.8) }}
+                        className="w-12 h-12 rounded-full items-center justify-center"
+                    >
+                        <AntDesign name="arrowright" size={20} color="#fff" />
+                    </View>
+                }
+                skipLabel={
+                    <Text className="font-bold" style={{ color: Colors.bgColor(0.8) }}>
+                        Skip
+                    </Text>
+                }
             />
         </>
     );

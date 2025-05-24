@@ -3,9 +3,14 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import LoginScreen from '../components/LoginScreen';
 import RegisterScreen from '../components/RegisterScreen';
 import { Colors } from '../constants/Colors';
+import CustomButton from '../components/CustomButton';
 
 const AuthScreen = () => {
   const [isSignup, setIsSignup] = useState(true);
+
+  const handleToggle = () => {
+    setIsSignup(!isSignup);
+  }
 
   return (
     <View
@@ -16,18 +21,13 @@ const AuthScreen = () => {
         {isSignup ? <RegisterScreen /> : <LoginScreen />}
       </View>
 
-      <TouchableOpacity
-        className="mt-6 p-3 rounded-lg self-center"
-        style={{ backgroundColor: Colors.bgColor(1) }}
-        onPress={() => setIsSignup(!isSignup)}
-      >
-        <Text
-          className="text-center font-semibold"
-          style={{ color: Colors.black(1) }}
-        >
-          {isSignup ? "Already have an account? Login" : "New user? Sign up"}
-        </Text>
-      </TouchableOpacity>
+      <CustomButton
+        inverted={true}
+        handlePress={handleToggle}
+        text={isSignup ? "Already have an account? Login" : "New user? Sign up"}
+        otherStyles={{ width: "95%", alignSelf: "center", marginBottom: 20 }}
+      />
+
     </View>
   );
 };

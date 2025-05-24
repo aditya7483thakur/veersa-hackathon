@@ -93,12 +93,12 @@ const RegisterScreen = () => {
     justifyContent: 'center',
     padding: 20,
   }}>
-      <Text className="text-3xl font-bold text-center mb-6" style={{ color: Colors.black(1) }}>
-        Sign Up
+      <Text className="text-3xl font-bold text-center mb-6" style={{ color: Colors.bgColor(0.8) }}>
+        Get Started With Clynic
       </Text>
 
       <TextInput
-        className={`border rounded-lg p-3 mb-1 text-base ${errors.name ? 'border-red-500' : 'border-gray-300'}`}
+        className={`border rounded-lg p-3 mb-3 text-base ${errors.name ? 'border-red-500' : 'border-gray-300'}`}
         placeholder="Name"
         value={form.name}
         onChangeText={(val) => handleChange('name', val)}
@@ -108,7 +108,7 @@ const RegisterScreen = () => {
       {errors.name && <Text className="text-red-500 text-sm mb-2">{errors.name}</Text>}
 
       <TextInput
-        className={`border rounded-lg p-3 mb-1 text-base ${errors.email ? 'border-red-500' : 'border-gray-300'}`}
+        className={`border rounded-lg p-3 mb-3 text-base ${errors.email ? 'border-red-500' : 'border-gray-300'}`}
         placeholder="Email"
         keyboardType="email-address"
         autoCapitalize="none"
@@ -120,7 +120,7 @@ const RegisterScreen = () => {
       {errors.email && <Text className="text-red-500 text-sm mb-2">{errors.email}</Text>}
 
       <TextInput
-        className={`border rounded-lg p-3 mb-1 text-base ${errors.password ? 'border-red-500' : 'border-gray-300'}`}
+        className={`border rounded-lg p-3 mb-3 text-base ${errors.password ? 'border-red-500' : 'border-gray-300'}`}
         placeholder="Password"
         secureTextEntry
         value={form.password}
@@ -131,7 +131,7 @@ const RegisterScreen = () => {
       {errors.password && <Text className="text-red-500 text-sm mb-2">{errors.password}</Text>}
 
       <TextInput
-        className={`border rounded-lg p-3 mb-1 text-base ${errors.role ? 'border-red-500' : 'border-gray-300'}`}
+        className={`border rounded-lg p-3 mb-3 text-base ${errors.role ? 'border-red-500' : 'border-gray-300'}`}
         placeholder="Role (patient or doctor)"
         value={form.role}
         onChangeText={(val) => handleChange('role', val)}
