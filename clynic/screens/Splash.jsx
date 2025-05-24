@@ -4,23 +4,23 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Images } from '../constants/Images';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useEffect } from 'react';
+import { useAuth } from '../context/AuthContext';
 
 const SplashScreen = () => {
     const navigation = useNavigation();
+    const { authenticated, loading } = useAuth();
 
     useEffect(() => {
         // 2 seconds load screen
         setTimeout(() => {
-            navigation.replace("auth-wrapper");
+            if (authenticated) {
+                navigation.replace("home");
+            }
+            else {
+                navigation.replace("onboarding");
+            }
         }, 2000);
     }, []);
-
-    useFocusEffect(() => {
-        // 2 seconds load screen
-        setTimeout(() => {
-            navigation.replace("auth-wrapper");
-        }, 2000);
-    });
 
     return (
     <>
