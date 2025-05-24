@@ -59,7 +59,7 @@ const AppointmentScreen = () => {
       setError(null);
 
       const response = await axios.get(
-        `${process.env.BACKEND_URL}/appointment/upcoming`
+        `${process.env.EXPO_PUBLIC_BACKED_API_URL}/appointment/upcoming`
       );
       setAppointments(response.data);
     } catch (error) {

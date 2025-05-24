@@ -14,8 +14,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons"; // or react-native-vector-icons
 import { Colors } from "../../constants/Colors";
 import { useAuth } from "../../context/AuthContext";
-import renderDoctorCard from "../../components/RenderDoctorCard";
 import axios from "axios";
+import DoctorCard from "../../components/DoctorCard";
 
 const ExploreScreen = () => {
   const [doctors, setDoctors] = useState([]);
@@ -23,7 +23,7 @@ const ExploreScreen = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const { accessToken } = useAuth();
+  const { accessToken, logout } = useAuth();
 
   // Fetch doctors from API
   const fetchDoctors = async (isRefresh = false) => {
@@ -35,7 +35,7 @@ const ExploreScreen = () => {
       }
 
       const response = await axios.get(
-        "http://192.168.1.6:5000/doctor/get-doctors"
+        `${process.env.EXPO_PUBLIC_BACKED_API_URL}/doctor/get-doctors`
       );
 
       const result = response.data;
@@ -115,6 +115,9 @@ const ExploreScreen = () => {
                 Your Health, Our Priority
               </Text>
             </View>
+            <TouchableOpacity>
+              <Text onPress={logout}>logout</Text>
+            </TouchableOpacity>
             <TouchableOpacity className="w-10 h-10 rounded-full bg-white bg-opacity-20 items-center justify-center">
               <Ionicons name="power" size={20} color={Colors.bgWhite(1)} />
             </TouchableOpacity>
@@ -182,8 +185,8 @@ const ExploreScreen = () => {
           ) : (
             <FlatList
               data={filteredDoctors}
-              renderItem={renderDoctorCard}
               keyExtractor={(item) => item._id}
+              renderItem={({ item }) => <DoctorCard item={item} />}
               showsVerticalScrollIndicator={false}
               refreshControl={
                 <RefreshControl

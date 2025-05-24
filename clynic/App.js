@@ -7,6 +7,7 @@ import AuthProvider, { useAuth } from "./context/AuthContext";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import "./global.css";
 import TabLayout from "./screens/TabLayout";
+import DoctorProfile from "./screens/patient/DoctorProfile";
 
 const RootStack = createNativeStackNavigator();
 
@@ -32,6 +33,8 @@ function AppNavigator() {
           // Authenticated screens
           <>
             <RootStack.Screen name="tabs" component={TabLayout} />
+            <RootStack.Screen name="doctor-profile" component={DoctorProfile} />
+
             {/* Add other authenticated screens here */}
           </>
         ) : (
