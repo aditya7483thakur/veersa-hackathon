@@ -20,7 +20,6 @@ app.use(
   })
 );
 
-app.use(bodyParser.json());
 
 app.get("/", (req, res) => {
   res.send("API is running...");

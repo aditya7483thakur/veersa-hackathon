@@ -24,6 +24,9 @@ const LoginScreen = () => {
 
   const handleChange = (key, value) => {
     setForm({ ...form, [key]: value });
+    if (errors[key]) {
+      setErrors({ ...errors, [key]: '' });
+    }
   };
 
   const validate = () => {
