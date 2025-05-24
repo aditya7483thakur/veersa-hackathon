@@ -7,49 +7,49 @@ import {
   StatusBar,
   Image,
   RefreshControl,
-  ActivityIndicator
-} from 'react-native';
-import React, { useState, useEffect } from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { Ionicons } from '@expo/vector-icons'; // or react-native-vector-icons
-import { Colors } from '../../constants/Colors';
-import { useAuth } from '../../context/AuthContext';
-import renderDoctorCard from '../../components/RenderDoctorCard';
-import axios from 'axios';
+  ActivityIndicator,
+} from "react-native";
+import React, { useState, useEffect } from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { Ionicons } from "@expo/vector-icons"; // or react-native-vector-icons
+import { Colors } from "../../constants/Colors";
+import { useAuth } from "../../context/AuthContext";
+import renderDoctorCard from "../../components/RenderDoctorCard";
+import axios from "axios";
 
 const ExploreScreen = () => {
   const [doctors, setDoctors] = useState([]);
   const [filteredDoctors, setFilteredDoctors] = useState([]);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const { accessToken } = useAuth();
 
   // Fetch doctors from API
-  const fetchDoctors = async () => {
+  const fetchDoctors = async (isRefresh = false) => {
     try {
-      // Replace with your actual API endpoint
-      console.log(1)
-      const response = await axios.get('http://192.168.29.211:5000/doctor/get-doctors');
+      if (isRefresh) {
+        setRefreshing(true);
+      } else {
+        setLoading(true);
+      }
 
-      console.log(2)
+      const response = await axios.get(
+        "http://192.168.1.6:5000/doctor/get-doctors"
+      );
 
       const result = response.data;
-
-      console.log(3)
-
       if (result.success) {
         setDoctors(result.data);
         setFilteredDoctors(result.data);
       }
     } catch (error) {
-      console.error('Error fetching doctors:',  error.message || error);
+      console.error("Error fetching doctors:", error.message || error);
     } finally {
       setLoading(false);
       setRefreshing(false);
     }
   };
-
   useEffect(() => {
     fetchDoctors();
   }, []);
@@ -57,15 +57,16 @@ const ExploreScreen = () => {
   // Handle search
   const handleSearch = (text) => {
     setSearchQuery(text);
-    if (text.trim() === '') {
+    if (text.trim() === "") {
       setFilteredDoctors(doctors);
     } else {
-      const filtered = doctors.filter(doctor =>
-        doctor.doctorName?.toLowerCase().includes(text.toLowerCase()) ||
-        doctor.specialization?.toLowerCase().includes(text.toLowerCase()) ||
-        doctor.hospitalName?.toLowerCase().includes(text.toLowerCase()) ||
-        doctor.city?.toLowerCase().includes(text.toLowerCase()) ||
-        doctor.state?.toLowerCase().includes(text.toLowerCase())
+      const filtered = doctors.filter(
+        (doctor) =>
+          doctor.doctorName?.toLowerCase().includes(text.toLowerCase()) ||
+          doctor.specialization?.toLowerCase().includes(text.toLowerCase()) ||
+          doctor.hospitalName?.toLowerCase().includes(text.toLowerCase()) ||
+          doctor.city?.toLowerCase().includes(text.toLowerCase()) ||
+          doctor.state?.toLowerCase().includes(text.toLowerCase())
       );
       setFilteredDoctors(filtered);
     }
@@ -83,7 +84,6 @@ const ExploreScreen = () => {
   };
 
   // Render doctor card
- 
 
   if (loading) {
     return (
@@ -92,15 +92,8 @@ const ExploreScreen = () => {
         style={{ backgroundColor: Colors.bgColor(1) }}
       >
         <View className="flex-1 justify-center items-center">
-          <ActivityIndicator
-            size="large"
-            color={Colors.bgWhite(1)}
-          />
-          <Text
-            className="mt-4 text-white text-lg"
-          >
-            Loading doctors...
-          </Text>
+          <ActivityIndicator size="large" color={Colors.bgWhite(1)} />
+          <Text className="mt-4 text-white text-lg">Loading doctors...</Text>
         </View>
       </SafeAreaView>
     );
@@ -108,10 +101,7 @@ const ExploreScreen = () => {
 
   return (
     <>
-      <StatusBar
-        backgroundColor={Colors.bgColor(1)}
-        barStyle="light-content"
-      />
+      <StatusBar backgroundColor={Colors.bgColor(1)} barStyle="light-content" />
       <SafeAreaView
         className="flex-1"
         style={{ backgroundColor: Colors.bgColor(1) }}
@@ -120,21 +110,13 @@ const ExploreScreen = () => {
         <View className="px-4 pb-6">
           <View className="flex-row justify-between items-center mb-6">
             <View>
-              <Text className="text-2xl font-bold text-white">
-                MediLink
-              </Text>
+              <Text className="text-2xl font-bold text-white">MediLink</Text>
               <Text className="text-white opacity-80">
                 Your Health, Our Priority
               </Text>
             </View>
-            <TouchableOpacity
-              className="w-10 h-10 rounded-full bg-white bg-opacity-20 items-center justify-center"
-            >
-              <Ionicons
-                name="power"
-                size={20}
-                color={Colors.bgWhite(1)}
-              />
+            <TouchableOpacity className="w-10 h-10 rounded-full bg-white bg-opacity-20 items-center justify-center">
+              <Ionicons name="power" size={20} color={Colors.bgWhite(1)} />
             </TouchableOpacity>
           </View>
 
@@ -149,11 +131,7 @@ const ExploreScreen = () => {
               elevation: 3,
             }}
           >
-            <Ionicons
-              name="search"
-              size={20}
-              color={Colors.black(0.4)}
-            />
+            <Ionicons name="search" size={20} color={Colors.black(0.4)} />
             <TextInput
               className="flex-1 ml-3 text-base"
               placeholder="Search doctors, specialties..."
@@ -162,11 +140,7 @@ const ExploreScreen = () => {
               onChangeText={handleSearch}
             />
             <TouchableOpacity>
-              <Ionicons
-                name="options"
-                size={20}
-                color={Colors.bgColor(1)}
-              />
+              <Ionicons name="options" size={20} color={Colors.bgColor(1)} />
             </TouchableOpacity>
           </View>
         </View>
