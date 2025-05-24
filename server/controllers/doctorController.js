@@ -3,6 +3,7 @@ import { Doctor } from "../models/Doctor.js";
 
 export const getAllDoctors = async (req, res) => {
   try {
+    console.log('hi1')
     const doctors = await Doctor.find().populate("user_id", "-password");
 
     res.status(200).json({
