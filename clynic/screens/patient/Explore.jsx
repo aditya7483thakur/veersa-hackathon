@@ -111,17 +111,12 @@ const ExploreScreen = () => {
           <View className="flex-row justify-between items-center mb-6">
             <View>
               <Text className="text-2xl font-bold text-white">
-                MediLink
+                Clynic
               </Text>
               <Text className="text-white opacity-80">
                 Your Health, Our Priority
               </Text>
             </View>
-            <TouchableOpacity>
-              <Text onPress={logout}>
-                logout
-              </Text>
-            </TouchableOpacity>
             <TouchableOpacity
               className="w-12 h-12 rounded-full items-center justify-center"
               style={{ backgroundColor: Colors.bgWhite(0.2), borderColor: Colors.bgWhite(0.5), borderWidth: 1 }}
@@ -139,7 +134,7 @@ const ExploreScreen = () => {
                 size={20}
                 color={Colors.bgWhite(1)}
               />
->>>>>>> sid
+
             </TouchableOpacity>
           </View>
 
