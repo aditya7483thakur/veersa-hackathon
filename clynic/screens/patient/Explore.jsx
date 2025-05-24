@@ -29,7 +29,7 @@ const ExploreScreen = () => {
   const fetchDoctors = async () => {
     try {
       // Replace with your actual API endpoint
-      const response = await axios.get('https://veersa-hackathon-aoke.onrender.com/doctor/get-doctors');
+      const response = await axios.get(`${process.env.EXPO_PUBLIC_BACKED_API_URL}/doctor/get-doctors`);
 
       const result = response.data;
 
