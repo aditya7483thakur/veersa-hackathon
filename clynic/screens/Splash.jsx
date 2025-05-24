@@ -11,18 +11,14 @@ const SplashScreen = () => {
     useEffect(() => {
         // 2 seconds load screen
         setTimeout(() => {
-            navigation.replace("auth-wrapper", {
-                screen: "intro"
-            });
+            navigation.replace("auth-wrapper");
         }, 2000);
     }, []);
 
     useFocusEffect(() => {
         // 2 seconds load screen
         setTimeout(() => {
-            navigation.replace("auth-wrapper", {
-                screen: "intro"
-            });
+            navigation.replace("auth-wrapper");
         }, 2000);
     });
 
