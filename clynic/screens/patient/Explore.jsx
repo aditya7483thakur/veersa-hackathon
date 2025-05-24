@@ -7,7 +7,8 @@ import {
   StatusBar,
   Image,
   RefreshControl,
-  ActivityIndicator
+  ActivityIndicator,
+  Alert
 } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -16,6 +17,7 @@ import { Colors } from '../../constants/Colors';
 import { useAuth } from '../../context/AuthContext';
 import axios from 'axios';
 import DoctorCard from '../../components/RenderDoctorCard';
+import { Images } from '../../constants/Images';
 
 const ExploreScreen = () => {
   const [doctors, setDoctors] = useState([]);
@@ -23,7 +25,7 @@ const ExploreScreen = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const { accessToken ,logout} = useAuth();
+  const { accessToken, logout} = useAuth();
 
   // Fetch doctors from API
   const fetchDoctors = async () => {
@@ -108,27 +110,34 @@ const ExploreScreen = () => {
         barStyle="light-content"
       />
       <SafeAreaView
-        className="flex-1"
+        className="flex-1 pt-5"
         style={{ backgroundColor: Colors.bgColor(1) }}
       >
         {/* Header */}
-        <View className="px-4 pb-6">
+        <View className="px-6 pb-6">
           <View className="flex-row justify-between items-center mb-6">
             <View>
-              <Text className="text-2xl font-bold text-white">
-                MediLink
-              </Text>
+              <View className="flex-row ml-[-10] items-center justify-center gap-1">
+                <Image source={Images.logo} className="w-12 h-12 ml-[-25%]" resizeMode='contain' />
+                <Text className="text-2xl font-bold text-white">
+                  Clynic
+                </Text>
+              </View>
               <Text className="text-white opacity-80">
                 Your Health, Our Priority
               </Text>
             </View>
-            <TouchableOpacity>
-              <Text onPress={logout}>
-                logout
-              </Text>
-            </TouchableOpacity>
             <TouchableOpacity
-              className="w-10 h-10 rounded-full bg-white bg-opacity-20 items-center justify-center"
+              className="w-12 h-12 rounded-full items-center justify-center"
+              style={{ backgroundColor: Colors.bgWhite(0.2), borderColor: Colors.bgWhite(0.5), borderWidth: 1 }}
+              onPress={() => {
+                Alert.alert("Confirm Sign out", "Sure you want to sign out?", [
+                {
+                  text: "OK",
+                  onPress: logout
+                }
+                ], { cancelable: true });
+              }}
             >
               <Ionicons
                 name="power"
@@ -140,13 +149,14 @@ const ExploreScreen = () => {
 
           {/* Search Bar */}
           <View
-            className="bg-white rounded-2xl px-4 py-3 flex-row items-center"
+            className="rounded-xl px-4 py-1 flex-row items-center"
             style={{
               shadowColor: Colors.black(0.1),
               shadowOffset: { width: 0, height: 2 },
               shadowOpacity: 0.1,
               shadowRadius: 8,
               elevation: 3,
+              backgroundColor: Colors.bgWhite(0.95)
             }}
           >
             <Ionicons
@@ -177,7 +187,7 @@ const ExploreScreen = () => {
           style={{ backgroundColor: Colors.bgWhite(0.95) }}
         >
           <Text
-            className="text-xl font-bold mb-4 px-4"
+            className="text-xl font-bold mb-4 px-5"
             style={{ color: Colors.bgColor(1) }}
           >
             Available Doctors
@@ -218,7 +228,7 @@ const ExploreScreen = () => {
                   colors={[Colors.bgColor(1)]}
                 />
               }
-              contentContainerStyle={{ paddingBottom: 100 }}
+              contentContainerStyle={{ paddingBottom: 50 }}
             />
           )}
         </View>

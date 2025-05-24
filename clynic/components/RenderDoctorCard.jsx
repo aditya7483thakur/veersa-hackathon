@@ -10,6 +10,7 @@ import { useNavigation } from '@react-navigation/native';
 
 const DoctorCard = ({ item }) => {
     const navigation = useNavigation();
+    console.log(item.profilePhoto);
 
     return (
         <TouchableOpacity
@@ -30,7 +31,8 @@ const DoctorCard = ({ item }) => {
                 >
                     {item.profilePhoto ? (
                         <Image
-                            source={{ uri: item.profilePhoto }}
+                        // Publicly accessible URI
+                            source={{ uri: "https://res.cloudinary.com/dkhbiyylo/image/upload/fl_preserve_transparency/v1748009059/avatar_aetfjt.jpg?_s=public-apps" }}
                             className="w-16 h-16 rounded-full"
                             resizeMode="cover"
                         />
@@ -50,12 +52,18 @@ const DoctorCard = ({ item }) => {
                     <Text className="text-sm mb-1" style={{ color: Colors.black(0.6) }}>
                         {item.specialization || 'General Practice'}
                     </Text>
-                    <Text className="text-xs mb-2" style={{ color: Colors.black(0.5) }}>
-                        {item.hospitalName || 'Medical Center'}
-                    </Text>
-                    <Text className="text-xs" style={{ color: Colors.black(0.5) }}>
-                        {item.experience || '0'} years of Experience
-                    </Text>
+                    <View className="flex-row gap-2 items-center">
+                        <Ionicons name="pulse" size={15} color={Colors.black(0.5)} style={{ marginTop: -7 }}/>
+                        <Text className="text-xs mb-2" style={{ color: Colors.black(0.5) }}>
+                            {item.hospitalName || 'Medical Center'}
+                        </Text>
+                    </View>
+                    <View className="flex-row gap-1 items-center">
+                        <Ionicons name="star" size={12} color={Colors.black(0.5)} />
+                        <Text className="text-xs" style={{ color: Colors.black(0.5) }}>
+                            Experience: {item.experience || '0'} years
+                        </Text>
+                    </View>
                 </View>
             </View>
 

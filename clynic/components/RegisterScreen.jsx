@@ -291,9 +291,10 @@ const validate = () => {
         justifyContent: 'center',
         padding: 20,
       }}
+      showsVerticalScrollIndicator={false}
     >
-      <Text className="text-3xl font-bold text-center mb-6" style={{ color: Colors.black(1) }}>
-        Sign Up
+      <Text className="text-2xl font-bold text-center mb-6" style={{ color: Colors.bgColor(0.8) }}>
+       Get Started
       </Text>
 
       {/* Role Selection Tabs */}
