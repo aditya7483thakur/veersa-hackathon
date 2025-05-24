@@ -20,9 +20,8 @@ const AuthProvider = ({ children }) => {
       const accessToken = await SecureStore.getItemAsync(
         process.env.EXPO_PUBLIC_ACCESS_TOKEN_SECRET
       );
-      
 
-      if (accessToken ) {
+      if (accessToken) {
         axios.defaults.headers.common["Authorization"] =
           `Bearer ${accessToken}`;
 
@@ -57,7 +56,7 @@ const AuthProvider = ({ children }) => {
           ...user,
         }
       );
-      const { accessToken  } = response.data;
+      const { accessToken } = response.data;
 
       setAuthState({
         accessToken,
@@ -72,12 +71,12 @@ const AuthProvider = ({ children }) => {
       );
       Alert.alert("Success", response.data.message);
     } catch (error) {
-      console.log("Registration error details:")
-      Alert.alert("Error", error.response.data.message);
+      console.log("Registration error details:");
+      Alert.alert("Error", error.message);
     }
   };
 
-  const login = async ({email, password}) => {
+  const login = async ({ email, password }) => {
     try {
       const response = await axios.post(
         `${process.env.EXPO_PUBLIC_API_URL}/auth/login`,
@@ -91,7 +90,7 @@ const AuthProvider = ({ children }) => {
         Alert.alert("Error", "Invalid Credentials");
         return;
       }
-      const { accessToken  } = response.data;
+      const { accessToken } = response.data;
 
       setAuthState({
         accessToken,
@@ -104,11 +103,10 @@ const AuthProvider = ({ children }) => {
         process.env.EXPO_PUBLIC_ACCESS_TOKEN_SECRET,
         accessToken
       );
-      
 
       return response;
     } catch (error) {
-      Alert.alert("Error", error.response.data.message);
+      Alert.alert("Error", error.message);
       console.log(error);
     }
   };
@@ -118,7 +116,7 @@ const AuthProvider = ({ children }) => {
       await SecureStore.deleteItemAsync(
         process.env.EXPO_PUBLIC_ACCESS_TOKEN_SECRET
       );
-      
+
       axios.defaults.headers.common["Authorization"] = "";
       setAuthState({
         accessToken: null,
