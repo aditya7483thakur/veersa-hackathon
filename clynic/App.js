@@ -1,12 +1,12 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import SplashScreen from "./screens/Splash";
-import Home from "./screens/Home";
 import OnboardingScreens from "./components/OnboardingScreens";
 import AuthScreen from "./screens/auth";
 import AuthProvider, { useAuth } from "./context/AuthContext";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import "./global.css";
+import TabLayout from "./screens/TabLayout";
 
 const RootStack = createNativeStackNavigator();
 
@@ -31,7 +31,7 @@ function AppNavigator() {
         {authenticated ? (
           // Authenticated screens
           <>
-            <RootStack.Screen name="home" component={Home} />
+            <RootStack.Screen name="tabs" component={TabLayout} />
             {/* Add other authenticated screens here */}
           </>
         ) : (
