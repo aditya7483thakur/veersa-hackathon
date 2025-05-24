@@ -7,13 +7,11 @@ import {
   StatusBar
 } from 'react-native';
 import { useAuth } from '../context/AuthContext';
-import { useNavigation } from '@react-navigation/native';
 import CustomButton from './CustomButton';
 import { Colors } from '../constants/Colors';
 
 const LoginScreen = () => {
   const { login } = useAuth();
-  const navigation = useNavigation();
 
   const [form, setForm] = useState({
     email: '',
