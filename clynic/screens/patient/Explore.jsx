@@ -8,16 +8,6 @@ import {
   Image,
   RefreshControl,
   ActivityIndicator,
-<<<<<<< HEAD
-} from "react-native";
-import React, { useState, useEffect } from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { Ionicons } from "@expo/vector-icons"; // or react-native-vector-icons
-import { Colors } from "../../constants/Colors";
-import { useAuth } from "../../context/AuthContext";
-import axios from "axios";
-import DoctorCard from "../../components/DoctorCard";
-=======
   Alert
 } from 'react-native';
 import React, { useState, useEffect } from 'react';
@@ -27,8 +17,6 @@ import { Colors } from '../../constants/Colors';
 import { useAuth } from '../../context/AuthContext';
 import axios from 'axios';
 import DoctorCard from '../../components/RenderDoctorCard';
-import { Images } from '../../constants/Images';
->>>>>>> sid
 
 const ExploreScreen = () => {
   const [doctors, setDoctors] = useState([]);
@@ -36,11 +24,7 @@ const ExploreScreen = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-<<<<<<< HEAD
-  const { accessToken, logout } = useAuth();
-=======
-  const { accessToken, logout} = useAuth();
->>>>>>> sid
+  const { accessToken ,logout} = useAuth();
 
   // Fetch doctors from API
   const fetchDoctors = async (isRefresh = false) => {
@@ -127,27 +111,13 @@ const ExploreScreen = () => {
         <View className="px-6 pb-6">
           <View className="flex-row justify-between items-center mb-6">
             <View>
-<<<<<<< HEAD
-              <Text className="text-2xl font-bold text-white">MediLink</Text>
-=======
-              <View className="flex-row ml-[-10] items-center justify-center gap-1">
-                <Image source={Images.logo} className="w-12 h-12 ml-[-25%]" resizeMode='contain' />
-                <Text className="text-2xl font-bold text-white">
-                  Clynic
-                </Text>
-              </View>
->>>>>>> sid
+              <Text className="text-2xl font-bold text-white">
+                Clynic
+              </Text>
               <Text className="text-white opacity-80">
                 Your Health, Our Priority
               </Text>
             </View>
-<<<<<<< HEAD
-            <TouchableOpacity>
-              <Text onPress={logout}>logout</Text>
-            </TouchableOpacity>
-            <TouchableOpacity className="w-10 h-10 rounded-full bg-white bg-opacity-20 items-center justify-center">
-              <Ionicons name="power" size={20} color={Colors.bgWhite(1)} />
-=======
             <TouchableOpacity
               className="w-12 h-12 rounded-full items-center justify-center"
               style={{ backgroundColor: Colors.bgWhite(0.2), borderColor: Colors.bgWhite(0.5), borderWidth: 1 }}
@@ -165,7 +135,7 @@ const ExploreScreen = () => {
                 size={20}
                 color={Colors.bgWhite(1)}
               />
->>>>>>> sid
+
             </TouchableOpacity>
           </View>
 
