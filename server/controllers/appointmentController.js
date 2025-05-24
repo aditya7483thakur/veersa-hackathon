@@ -1,5 +1,4 @@
 import { Appointment } from "../models/Appointment.js";
-import { Doctor } from "../models/Doctor.js";
 
 export const newBooking = async (req, res) => {
   const { doctor_id, appointmentDate, timeSlot } = req.body;
@@ -87,22 +86,7 @@ export const upcoming = async (req, res) => {
   }
 };
 
-export const getAllDoctors = async (req, res) => {
-  try {
-    const doctors = await Doctor.find().populate("user_id", "-password");
 
-    res.status(200).json({
-      success: true,
-      message: "Doctors fetched successfully",
-      data: doctors,
-    });
-  } catch (error) {
-    console.error("Error fetching doctors:", error);
-    res.status(500).json({
-      message: "Server Error. Could not fetch doctors.",
-    });
-  }
-};
 
 // function to cancel an appointment
 export const cancel = async (req, res) => {

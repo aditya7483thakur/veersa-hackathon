@@ -4,7 +4,6 @@ import {
   checkAvailability,
   upcoming,
   cancel,
-  getAllDoctors,
 } from "../controllers/appointmentController.js";
 import { auth } from "../middlewares/auth.js";
 
@@ -18,6 +17,5 @@ router.get("/upcoming", auth, upcoming);
 
 router.get("/cancel", auth, cancel);
 
-router.get("/get-doctors", auth, getAllDoctors);
 
 export default router;
