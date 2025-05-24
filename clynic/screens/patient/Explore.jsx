@@ -7,8 +7,7 @@ import {
   StatusBar,
   Image,
   RefreshControl,
-  ActivityIndicator,
-  Alert
+  ActivityIndicator
 } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -17,36 +16,40 @@ import { Colors } from '../../constants/Colors';
 import { useAuth } from '../../context/AuthContext';
 import axios from 'axios';
 import DoctorCard from '../../components/RenderDoctorCard';
-import { Images } from '../../constants/Images';
 
 const ExploreScreen = () => {
   const [doctors, setDoctors] = useState([]);
   const [filteredDoctors, setFilteredDoctors] = useState([]);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const { accessToken, logout} = useAuth();
+  const { accessToken ,logout} = useAuth();
 
   // Fetch doctors from API
-  const fetchDoctors = async () => {
+  const fetchDoctors = async (isRefresh = false) => {
     try {
-      // Replace with your actual API endpoint
-      const response = await axios.get(`${process.env.EXPO_PUBLIC_BACKED_API_URL}/doctor/get-doctors`);
+      if (isRefresh) {
+        setRefreshing(true);
+      } else {
+        setLoading(true);
+      }
+
+      const response = await axios.get(
+        `${process.env.EXPO_PUBLIC_BACKED_API_URL}/doctor/get-doctors`
+      );
 
       const result = response.data;
-
       if (result.success) {
         setDoctors(result.data);
         setFilteredDoctors(result.data);
       }
     } catch (error) {
-      console.error('Error fetching doctors:',  error.message || error);
+      console.error("Error fetching doctors:", error.message || error);
     } finally {
       setLoading(false);
       setRefreshing(false);
     }
   };
-
   useEffect(() => {
     fetchDoctors();
   }, []);
@@ -54,15 +57,16 @@ const ExploreScreen = () => {
   // Handle search
   const handleSearch = (text) => {
     setSearchQuery(text);
-    if (text.trim() === '') {
+    if (text.trim() === "") {
       setFilteredDoctors(doctors);
     } else {
-      const filtered = doctors.filter(doctor =>
-        doctor.doctorName?.toLowerCase().includes(text.toLowerCase()) ||
-        doctor.specialization?.toLowerCase().includes(text.toLowerCase()) ||
-        doctor.hospitalName?.toLowerCase().includes(text.toLowerCase()) ||
-        doctor.city?.toLowerCase().includes(text.toLowerCase()) ||
-        doctor.state?.toLowerCase().includes(text.toLowerCase())
+      const filtered = doctors.filter(
+        (doctor) =>
+          doctor.doctorName?.toLowerCase().includes(text.toLowerCase()) ||
+          doctor.specialization?.toLowerCase().includes(text.toLowerCase()) ||
+          doctor.hospitalName?.toLowerCase().includes(text.toLowerCase()) ||
+          doctor.city?.toLowerCase().includes(text.toLowerCase()) ||
+          doctor.state?.toLowerCase().includes(text.toLowerCase())
       );
       setFilteredDoctors(filtered);
     }
@@ -80,7 +84,6 @@ const ExploreScreen = () => {
   };
 
   // Render doctor card
- 
 
   if (loading) {
     return (
@@ -89,15 +92,8 @@ const ExploreScreen = () => {
         style={{ backgroundColor: Colors.bgColor(1) }}
       >
         <View className="flex-1 justify-center items-center">
-          <ActivityIndicator
-            size="large"
-            color={Colors.bgWhite(1)}
-          />
-          <Text
-            className="mt-4 text-white text-lg"
-          >
-            Loading doctors...
-          </Text>
+          <ActivityIndicator size="large" color={Colors.bgWhite(1)} />
+          <Text className="mt-4 text-white text-lg">Loading doctors...</Text>
         </View>
       </SafeAreaView>
     );
@@ -105,10 +101,7 @@ const ExploreScreen = () => {
 
   return (
     <>
-      <StatusBar
-        backgroundColor={Colors.bgColor(1)}
-        barStyle="light-content"
-      />
+      <StatusBar backgroundColor={Colors.bgColor(1)} barStyle="light-content" />
       <SafeAreaView
         className="flex-1 pt-5"
         style={{ backgroundColor: Colors.bgColor(1) }}
@@ -117,16 +110,18 @@ const ExploreScreen = () => {
         <View className="px-6 pb-6">
           <View className="flex-row justify-between items-center mb-6">
             <View>
-              <View className="flex-row ml-[-10] items-center justify-center gap-1">
-                <Image source={Images.logo} className="w-12 h-12 ml-[-25%]" resizeMode='contain' />
-                <Text className="text-2xl font-bold text-white">
-                  Clynic
-                </Text>
-              </View>
+              <Text className="text-2xl font-bold text-white">
+                MediLink
+              </Text>
               <Text className="text-white opacity-80">
                 Your Health, Our Priority
               </Text>
             </View>
+            <TouchableOpacity>
+              <Text onPress={logout}>
+                logout
+              </Text>
+            </TouchableOpacity>
             <TouchableOpacity
               className="w-12 h-12 rounded-full items-center justify-center"
               style={{ backgroundColor: Colors.bgWhite(0.2), borderColor: Colors.bgWhite(0.5), borderWidth: 1 }}
@@ -144,6 +139,7 @@ const ExploreScreen = () => {
                 size={20}
                 color={Colors.bgWhite(1)}
               />
+>>>>>>> sid
             </TouchableOpacity>
           </View>
 
@@ -159,11 +155,7 @@ const ExploreScreen = () => {
               backgroundColor: Colors.bgWhite(0.95)
             }}
           >
-            <Ionicons
-              name="search"
-              size={20}
-              color={Colors.black(0.4)}
-            />
+            <Ionicons name="search" size={20} color={Colors.black(0.4)} />
             <TextInput
               className="flex-1 ml-3 text-base"
               placeholder="Search doctors, specialties..."
@@ -172,11 +164,7 @@ const ExploreScreen = () => {
               onChangeText={handleSearch}
             />
             <TouchableOpacity>
-              <Ionicons
-                name="options"
-                size={20}
-                color={Colors.bgColor(1)}
-              />
+              <Ionicons name="options" size={20} color={Colors.bgColor(1)} />
             </TouchableOpacity>
           </View>
         </View>
