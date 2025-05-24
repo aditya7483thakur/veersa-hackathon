@@ -27,6 +27,7 @@ function AppNavigator() {
   return (
     <NavigationContainer>
       <RootStack.Navigator screenOptions={{ headerShown: false }}>
+        {/* <RootStack.Screen name="splash" component={SplashScreen} /> */}
         {authenticated ? (
           // Authenticated screens
           <>
