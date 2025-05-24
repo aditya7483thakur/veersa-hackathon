@@ -26,9 +26,12 @@ const TabLayout = () => {
           borderTopWidth: 0,
           height: 60,
           elevation: 5,
-          shadowColor: Colors.bgColor(1)
+          justifyContent: "center",
+          shadowColor: Colors.bgColor(1),
+          backgroundColor: "#fff",
+          zIndex: 5
         },
-        headerShown: false
+        headerShown: false,
       }}
       initialRouteName="Explore"
     >
@@ -45,7 +48,7 @@ const TabLayout = () => {
               height: '100%',
             }}>
               <View 
-                className="mt-[-3] w-12 h-12 rounded-full items-center justify-center text-center"
+                className="w-12 h-12 rounded-full items-center justify-center text-center mt-6"
                 style={{ backgroundColor: focused ? Colors.bgColor(0.8) : Colors.black(0.1), borderRadius: "100%" }}
               >
                 <AntDesign
@@ -54,11 +57,6 @@ const TabLayout = () => {
                   color={focused ? Colors.bgWhite(1) : Colors.black(0.4)}
                 />
               </View>
-              <Indicator
-                value={"Explore"}
-                focused={focused}
-                color={focused ? Colors.bgWhite(1) : Colors.black(0.4)}
-              />
             </View>
           )
         }}
@@ -76,7 +74,7 @@ const TabLayout = () => {
               height: '100%',
             }}>
               <View 
-                className="mt-[-3] w-12 h-12 rounded-full items-center justify-center text-center"
+                className="w-12 h-12 rounded-full items-center justify-center text-center mt-6"
                 style={{ backgroundColor: focused ? Colors.bgColor(0.8) : Colors.black(0.1), borderRadius: "100%" }}
               >
                 <AntDesign
@@ -85,11 +83,6 @@ const TabLayout = () => {
                   color={focused ? Colors.bgWhite(1) : Colors.black(0.4)}
                 />
               </View>
-              <Indicator
-                value={"Appointments"}
-                focused={focused}
-                color={focused ? Colors.bgWhite(1) : Colors.black(0.4)}
-              />
             </View>
           )
         }}
@@ -107,7 +100,7 @@ const TabLayout = () => {
               height: '100%',
             }}>
               <View 
-                className="mt-[-3] w-12 h-12 rounded-full items-center justify-center text-center"
+                className="w-12 h-12 rounded-full items-center justify-center text-center mt-6"
                 style={{ backgroundColor: focused ? Colors.bgColor(0.8) : Colors.black(0.1), borderRadius: "100%" }}
               >
                 <FontAwesome5
@@ -116,11 +109,6 @@ const TabLayout = () => {
                   color={focused ? Colors.bgWhite(1) : Colors.black(0.4)}
                 />
               </View>
-              <Indicator
-                value={"Ask AI"}
-                focused={focused}
-                color={focused ? Colors.bgWhite(1) : Colors.black(0.4)}
-              />
             </View>
           )
         }}
