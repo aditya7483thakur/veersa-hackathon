@@ -7,9 +7,11 @@ import {
 import { Colors } from '../constants/Colors';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { useEffect } from 'react';
 
 const DoctorCard = ({ item }) => {
     const navigation = useNavigation();
+
 
     return (
         <TouchableOpacity
@@ -31,7 +33,7 @@ const DoctorCard = ({ item }) => {
                     {item.profilePhoto ? (
                         <Image
                             source={{ uri: item.profilePhoto }}
-                            className="w-16 h-16 rounded-full"
+                            style={{ width: 64, height: 64, borderRadius: 32 }}
                             resizeMode="cover"
                         />
                     ) : (
@@ -41,6 +43,7 @@ const DoctorCard = ({ item }) => {
                             color={Colors.bgColor(1)}
                         />
                     )}
+
                 </View>
 
                 <View className="flex-1">

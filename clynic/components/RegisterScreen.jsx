@@ -234,10 +234,8 @@ const validate = () => {
 
     setLoading(true);
     try {
-        console.log(form)
         
       await register(form);
-              console.log(2)
 
       Alert.alert(
         "Success",
