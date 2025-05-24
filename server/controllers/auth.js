@@ -26,7 +26,7 @@ export const register = async (req, res) => {
       experience,
     } = req.body;
 
-    if ([name, email, password].some((field) => field?.trim() === "")) {
+    if (!name || !email || !password) {
       return res.status(400).json({ message: "Please Fill All Fields" });
     }
 
