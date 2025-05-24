@@ -5,95 +5,182 @@ import {
   FlatList,
   TouchableOpacity,
   StatusBar,
-  Image,
   RefreshControl,
-  ActivityIndicator
+  ActivityIndicator,
+  Alert
 } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Ionicons } from '@expo/vector-icons'; // or react-native-vector-icons
+import { Ionicons } from '@expo/vector-icons';
+
 import { Colors } from '../../constants/Colors';
 import { useAuth } from '../../context/AuthContext';
-import axios from 'axios';
 import DoctorCard from '../../components/RenderDoctorCard';
+import FilterModal from '../../components/FilterModal';
+import { doctorService } from '../../services/doctorService';
+import locationService from '../../services/locationService';
 
 const ExploreScreen = () => {
   const [doctors, setDoctors] = useState([]);
-  const [filteredDoctors, setFilteredDoctors] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const { accessToken ,logout} = useAuth();
+  const [showFilters, setShowFilters] = useState(false);
+  const [location, setLocation] = useState(null);
+  const [locationLoading, setLocationLoading] = useState(false);
+  
+  // Filter states
+  const [filters, setFilters] = useState({
+    fees: null,
+    distance: null,
+    experience: null,
+    sortBy: 'fees',
+    sortDirection: 'desc'
+  });
+  
+  const { accessToken, logout } = useAuth();
 
-  // Fetch doctors from API
-  const fetchDoctors = async () => {
+  // Get user location
+  const getUserLocation = async () => {
     try {
-      // Replace with your actual API endpoint
-      const response = await axios.get(`${process.env.EXPO_PUBLIC_BACKED_API_URL}/doctor/get-doctors`);
+      setLocationLoading(true);
+      const userLocation = await locationService.getCurrentLocation();
+      setLocation(userLocation);
+    } catch (error) {
+      console.error('Error getting location:', error);
+      Alert.alert('Location Error', error.message);
+    } finally {
+      setLocationLoading(false);
+    }
+  };
 
-      const result = response.data;
-
-      if (result.success) {
-        setDoctors(result.data);
-        setFilteredDoctors(result.data);
+  // Initial fetch of all doctors
+  const fetchAllDoctors = async () => {
+    try {
+      setLoading(true);
+      const response = await doctorService.getAllDoctors();
+      if (response.success) {
+        setDoctors(response.data);
       }
     } catch (error) {
-      console.error('Error fetching doctors:',  error.message || error);
+      console.error('Error fetching doctors:', error.message || error);
+      Alert.alert('Error', 'Failed to fetch doctors. Please try again.');
     } finally {
       setLoading(false);
       setRefreshing(false);
     }
   };
 
+  // Search doctors with filters
+  const searchDoctors = async (query = '', currentFilters = filters) => {
+    try {
+      setLoading(true);
+      
+      const searchParams = {
+        searchTerm: query,
+        ...currentFilters,
+        userLat: location?.latitude,
+        userLon: location?.longitude,
+      };
+
+      // Remove null/undefined values
+      Object.keys(searchParams).forEach(key => {
+        if (searchParams[key] === null || searchParams[key] === undefined) {
+          delete searchParams[key];
+        }
+      });
+      console.log(searchParams)
+
+      // const response = await doctorService.findDoctors(searchParams);
+      // setDoctors(response);
+    } catch (error) {
+      console.error('Error searching doctors:', error.message || error);
+      Alert.alert('Error', 'Failed to search doctors. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
   useEffect(() => {
-    fetchDoctors();
+    fetchAllDoctors();
+    getUserLocation();
   }, []);
 
-  // Handle search
+  // Handle search input
   const handleSearch = (text) => {
     setSearchQuery(text);
+    
     if (text.trim() === '') {
-      setFilteredDoctors(doctors);
-    } else {
-      const filtered = doctors.filter(doctor =>
-        doctor.doctorName?.toLowerCase().includes(text.toLowerCase()) ||
-        doctor.specialization?.toLowerCase().includes(text.toLowerCase()) ||
-        doctor.hospitalName?.toLowerCase().includes(text.toLowerCase()) ||
-        doctor.city?.toLowerCase().includes(text.toLowerCase()) ||
-        doctor.state?.toLowerCase().includes(text.toLowerCase())
+      // If search is empty and no filters applied, show all doctors
+      const hasActiveFilters = Object.values(filters).some(value => 
+        value !== null && value !== undefined && value !== ''
       );
-      setFilteredDoctors(filtered);
+      
+      if (!hasActiveFilters) {
+        fetchAllDoctors();
+      } else {
+        searchDoctors('', filters);
+      }
+    } else {
+      
+        searchDoctors(text, filters);
+      
     }
   };
 
   // Handle refresh
   const onRefresh = () => {
     setRefreshing(true);
-    fetchDoctors();
+    if (searchQuery.trim() === '' && !hasActiveFilters()) {
+      fetchAllDoctors();
+    } else {
+      searchDoctors(searchQuery, filters);
+    }
   };
 
-  // Calculate distance (placeholder - replace with actual distance calculation)
-  const calculateDistance = () => {
-    return (Math.random() * 10).toFixed(1);
+  // Check if filters are active
+  const hasActiveFilters = () => {
+    return Object.values(filters).some(value => 
+      value !== null && value !== undefined && value !== ''
+    );
   };
 
-  // Render doctor card
- 
+  // Apply filters
+  const applyFilters = (newFilters) => {
+    setFilters(newFilters);
+    setShowFilters(false);
+    searchDoctors(searchQuery, newFilters);
+  };
 
-  if (loading) {
+  // Reset filters
+  const resetFilters = () => {
+    const defaultFilters = {
+      fees: null,
+      distance: null,
+      experience: null,
+      sortBy: 'fees',
+      sortDirection: 'desc'
+    };
+    setFilters(defaultFilters);
+    
+    // If no search query, fetch all doctors, otherwise search with no filters
+    if (searchQuery.trim() === '') {
+      fetchAllDoctors();
+    } else {
+      searchDoctors(searchQuery, defaultFilters);
+    }
+  };
+
+  if (loading && doctors.length === 0) {
     return (
       <SafeAreaView
         className="flex-1"
         style={{ backgroundColor: Colors.bgColor(1) }}
       >
         <View className="flex-1 justify-center items-center">
-          <ActivityIndicator
-            size="large"
-            color={Colors.bgWhite(1)}
-          />
-          <Text
-            className="mt-4 text-white text-lg"
-          >
+          <ActivityIndicator size="large" color={Colors.bgWhite(1)} />
+          <Text className="mt-4 text-white text-lg">
             Loading doctors...
           </Text>
         </View>
@@ -122,20 +209,37 @@ const ExploreScreen = () => {
                 Your Health, Our Priority
               </Text>
             </View>
-            <TouchableOpacity>
-              <Text onPress={logout}>
-                logout
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              className="w-10 h-10 rounded-full bg-white bg-opacity-20 items-center justify-center"
-            >
-              <Ionicons
-                name="power"
-                size={20}
-                color={Colors.bgWhite(1)}
-              />
-            </TouchableOpacity>
+            
+            <View className="flex-row items-center space-x-3">
+              {/* Location Button */}
+              <TouchableOpacity
+                onPress={getUserLocation}
+                className="w-10 h-10 rounded-full bg-white bg-opacity-20 items-center justify-center"
+                disabled={locationLoading}
+              >
+                {locationLoading ? (
+                  <ActivityIndicator size="small" color={Colors.bgWhite(1)} />
+                ) : (
+                  <Ionicons
+                    name={location ? "location" : "location-outline"}
+                    size={20}
+                    color={location ? "#4CAF50" : Colors.bgWhite(1)}
+                  />
+                )}
+              </TouchableOpacity>
+              
+              {/* Logout Button */}
+              <TouchableOpacity
+                onPress={logout}
+                className="w-10 h-10 rounded-full bg-white bg-opacity-20 items-center justify-center"
+              >
+                <Ionicons
+                  name="power"
+                  size={20}
+                  color={Colors.bgWhite(1)}
+                />
+              </TouchableOpacity>
+            </View>
           </View>
 
           {/* Search Bar */}
@@ -161,14 +265,37 @@ const ExploreScreen = () => {
               value={searchQuery}
               onChangeText={handleSearch}
             />
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => setShowFilters(true)}>
               <Ionicons
                 name="options"
                 size={20}
-                color={Colors.bgColor(1)}
+                color={hasActiveFilters() ? "#4CAF50" : Colors.bgColor(1)}
               />
             </TouchableOpacity>
           </View>
+          
+          {/* Location Status */}
+          {location && (
+            <View className="flex-row items-center mt-2 px-2">
+              <Ionicons name="location" size={16} color="#4CAF50" />
+              <Text className="text-white opacity-80 ml-1 text-sm">
+                Location enabled - showing nearby results
+              </Text>
+            </View>
+          )}
+
+          {/* Active Filters Indicator */}
+          {hasActiveFilters() && (
+            <View className="flex-row items-center mt-2 px-2">
+              <Ionicons name="funnel" size={16} color="#4CAF50" />
+              <Text className="text-white opacity-80 ml-1 text-sm">
+                Filters applied
+              </Text>
+              <TouchableOpacity onPress={resetFilters} className="ml-2">
+                <Text className="text-white underline text-sm">Clear</Text>
+              </TouchableOpacity>
+            </View>
+          )}
         </View>
 
         {/* Available Doctors Section */}
@@ -183,7 +310,7 @@ const ExploreScreen = () => {
             Available Doctors
           </Text>
 
-          {filteredDoctors.length === 0 ? (
+          {doctors.length === 0 ? (
             <View className="flex-1 justify-center items-center">
               <Ionicons
                 name="medical-outline"
@@ -196,18 +323,18 @@ const ExploreScreen = () => {
               >
                 No doctors found
               </Text>
-              {searchQuery.length > 0 && (
+              {(searchQuery.length > 0 || hasActiveFilters()) && (
                 <Text
                   className="text-sm mt-2 text-center px-8"
                   style={{ color: Colors.black(0.4) }}
                 >
-                  Try adjusting your search terms
+                  Try adjusting your search terms or filters
                 </Text>
               )}
             </View>
           ) : (
             <FlatList
-              data={filteredDoctors}
+              data={doctors}
               keyExtractor={(item) => item._id}
               renderItem={({ item }) => <DoctorCard item={item} />}
               showsVerticalScrollIndicator={false}
@@ -222,6 +349,15 @@ const ExploreScreen = () => {
             />
           )}
         </View>
+
+        {/* Filter Modal */}
+        <FilterModal
+          visible={showFilters}
+          onClose={() => setShowFilters(false)}
+          filters={filters}
+          onApplyFilters={applyFilters}
+          onResetFilters={resetFilters}
+        />
       </SafeAreaView>
     </>
   );
