@@ -29,7 +29,7 @@ const ExploreScreen = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [location, setLocation] = useState(null);
   const [locationLoading, setLocationLoading] = useState(false);
-  
+
   // Filter states
   const [filters, setFilters] = useState({
     fees: null,
@@ -38,7 +38,7 @@ const ExploreScreen = () => {
     sortBy: 'fees',
     sortDirection: 'desc'
   });
-  
+
   const { accessToken, logout } = useAuth();
 
   // Get user location
@@ -76,7 +76,7 @@ const ExploreScreen = () => {
   const searchDoctors = async (query = '', currentFilters = filters) => {
     try {
       setLoading(true);
-      
+
       const searchParams = {
         searchTerm: query,
         ...currentFilters,
@@ -111,22 +111,22 @@ const ExploreScreen = () => {
   // Handle search input
   const handleSearch = (text) => {
     setSearchQuery(text);
-    
+
     if (text.trim() === '') {
       // If search is empty and no filters applied, show all doctors
-      const hasActiveFilters = Object.values(filters).some(value => 
+      const hasActiveFilters = Object.values(filters).some(value =>
         value !== null && value !== undefined && value !== ''
       );
-      
+
       if (!hasActiveFilters) {
         fetchAllDoctors();
       } else {
         searchDoctors('', filters);
       }
     } else {
-      
-        searchDoctors(text, filters);
-      
+
+      searchDoctors(text, filters);
+
     }
   };
 
@@ -142,7 +142,7 @@ const ExploreScreen = () => {
 
   // Check if filters are active
   const hasActiveFilters = () => {
-    return Object.values(filters).some(value => 
+    return Object.values(filters).some(value =>
       value !== null && value !== undefined && value !== ''
     );
   };
@@ -164,7 +164,7 @@ const ExploreScreen = () => {
       sortDirection: 'desc'
     };
     setFilters(defaultFilters);
-    
+
     // If no search query, fetch all doctors, otherwise search with no filters
     if (searchQuery.trim() === '') {
       fetchAllDoctors();
@@ -207,7 +207,7 @@ const ExploreScreen = () => {
                 Your Health, Our Priority
               </Text>
             </View>
-            
+
             <View className="flex-row items-center space-x-3">
               {/* Location Button */}
               <TouchableOpacity
@@ -225,7 +225,7 @@ const ExploreScreen = () => {
                   />
                 )}
               </TouchableOpacity>
-              
+
               {/* Logout Button */}
               <TouchableOpacity
                 onPress={logout}
@@ -268,29 +268,7 @@ const ExploreScreen = () => {
               />
             </TouchableOpacity>
           </View>
-          
-          {/* Location Status */}
-          {location && (
-            <View className="flex-row items-center mt-2 px-2">
-              <Ionicons name="location" size={16} color="#4CAF50" />
-              <Text className="text-white opacity-80 ml-1 text-sm">
-                Location enabled - showing nearby results
-              </Text>
-            </View>
-          )}
 
-          {/* Active Filters Indicator */}
-          {hasActiveFilters() && (
-            <View className="flex-row items-center mt-2 px-2">
-              <Ionicons name="funnel" size={16} color="#4CAF50" />
-              <Text className="text-white opacity-80 ml-1 text-sm">
-                Filters applied
-              </Text>
-              <TouchableOpacity onPress={resetFilters} className="ml-2">
-                <Text className="text-white underline text-sm">Clear</Text>
-              </TouchableOpacity>
-            </View>
-          )}
         </View>
 
         {/* Available Doctors Section */}
