@@ -27,9 +27,9 @@ const DoctorCard = ({ item, isAiCard = false }) => {
           navigation.navigate("ExploreTabs", {
             screen: "DoctorProfile", params: { doctor: item }
           })
-      } else {
+        } else {
           navigation.navigate("DoctorProfile", { doctor: item });
-}
+        }
       }}
     >
       <View className="flex-row items-center">
@@ -70,16 +70,18 @@ const DoctorCard = ({ item, isAiCard = false }) => {
           </View>
         </View>
         <View>
-          {item.score &&
-            <>
+          {item.score && (
+            <View className="items-center">
               <Text className="text-lg font-bold mb-1" style={{ color: Colors.bgColor(1) }}>
                 Score
               </Text>
               <Text className="text-lg font-bold mb-1" style={{ color: Colors.bgColor(1) }}>
-                {item?.score || 'null'}
+                {parseFloat(item.score)}
               </Text>
-            </>}
+            </View>
+          )}
         </View>
+
       </View>
 
       <View className="flex-row justify-between items-center mt-4 pt-3 border-t border-gray-100">
