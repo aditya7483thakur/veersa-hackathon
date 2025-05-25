@@ -19,11 +19,9 @@ class DoctorService {
   // Find doctors with filters and search
   async findDoctors(params) {
     try {
-      console.log(params);
       const response = await axios.get(`${BASE_URL}/doctor/filter-doctors`, {
         params: params,
       });
-      // console.log("Response", response);
       return response.data;
     } catch (error) {
       console.error("Error finding doctors:", error);

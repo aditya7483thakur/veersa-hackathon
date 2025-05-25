@@ -5,30 +5,17 @@ import { Colors } from '../../constants/Colors';
 import locationService from '../../services/locationService';
 import { Ionicons } from '@expo/vector-icons';
 import DoctorCard from '../../components/DoctorCard';
+import { useAuth } from '../../context/AuthContext';
+import axios from 'axios';
 
 const AskAIScreen = () => {
-  const [location, setLocation] = useState(null);
-  const [locationLoading, setLocationLoading] = useState(false);
+  const { location, setLocation } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
   const [doctors, setDoctors] = useState([]);
   const [searchLoading, setSearchLoading] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
-
+  const [firstAid, setFirstAid] = useState([]);
   // Replace with your actual API base URL
-  const API_BASE_URL = 'http://your-backend-url.com/api';
-
-  const getUserLocation = async () => {
-    try {
-      setLocationLoading(true);
-      const userLocation = await locationService.getCurrentLocation();
-      setLocation(userLocation);
-    } catch (error) {
-      console.error('Error getting location:', error);
-      Alert.alert('Location Error', error.message);
-    } finally {
-      setLocationLoading(false);
-    }
-  };
 
   const searchDoctors = async (query) => {
     if (!query.trim()) {
@@ -39,7 +26,7 @@ const AskAIScreen = () => {
 
     try {
       setSearchLoading(true);
-      
+
       // Build query parameters
       const params = new URLSearchParams({
         text: query.trim()
@@ -51,26 +38,19 @@ const AskAIScreen = () => {
         params.append('longitude', location.longitude.toString());
       }
 
-      console.log(params.toString())
 
-      // const response = await fetch(`${API_BASE_URL}/ai-seek?${params.toString()}`, {
-      //   method: 'GET',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      // });
+      const response = await axios.get(`${process.env.EXPO_PUBLIC_BACKED_API_URL}/doctor/ask-ai?${params.toString()}`);
+      const { doctors, firstAid } = response.data;
+      const bulletPoints = firstAid
+        .split(/(?<=[.?!])\s+/) // split by sentence endings
+        .filter(Boolean) // remove empty strings
+        .map(point => `• ${point.trim()}`)
+        .join('\n\n');
 
-      // if (!response.ok) {
-      //   throw new Error(`HTTP error! status: ${response.status}`);
-      // }
-
-      // const data = await response.json();
-      
-      // const doctorsData = data.doctors || data || [];
-      // setDoctors(doctorsData);
+      setFirstAid(bulletPoints); 
+      setDoctors(doctors);
       setHasSearched(true);
-      console.log("done")
-      
+
     } catch (error) {
       console.error('Error searching doctors:', error);
       Alert.alert('Search Error', 'Failed to search doctors. Please try again.');
@@ -90,17 +70,14 @@ const AskAIScreen = () => {
     return () => clearTimeout(timeoutId);
   }, [searchQuery, location]);
 
-  useEffect(() => {
-    getUserLocation();
-  }, []);
+
 
   const handleSearch = (text) => {
     setSearchQuery(text);
-    getUserLocation()
   };
 
   const renderDoctorItem = ({ item }) => (
-    <DoctorCard item={item} />
+    <DoctorCard item={item} isAiCard={true} />
   );
 
   const renderEmptyComponent = () => {
@@ -156,7 +133,7 @@ const AskAIScreen = () => {
         <View className="px-6 pt-5 pb-4">
           <View className="flex-row justify-between items-center mb-6">
             <View className="flex-row items-center space-x-3">
-                         
+
             </View>
           </View>
 
@@ -196,6 +173,29 @@ const AskAIScreen = () => {
 
         {/* Results Section */}
         <View className="flex-1" style={{ backgroundColor: Colors.bgWhite(0.95) }}>
+          {hasSearched&&firstAid && (
+            <View
+              className="bg-white mx-4 mt-4 mb-2 p-4 rounded-2xl shadow-sm"
+              style={{
+                shadowColor: Colors.black(0.1),
+                shadowOffset: { width: 0, height: 2 },
+                shadowOpacity: 0.1,
+                shadowRadius: 8,
+                elevation: 3,
+              }}
+            >
+              <Text className="text-base font-bold " style={{ color: Colors.bgColor(1) }}>
+                💡 AI First-Aid Tip
+              </Text>
+              <View className="ml-1">
+                <Text className="text-sm " style={{ color: Colors.black(0.7) }}>
+                  {firstAid}
+                </Text>
+              </View>
+            </View>
+          )}
+
+
           <FlatList
             data={doctors}
             renderItem={renderDoctorItem}

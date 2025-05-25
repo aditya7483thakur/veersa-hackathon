@@ -16,7 +16,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { Images } from "../../../constants/Images";
 import { Colors } from "../../../constants/Colors";
 import { useAuth } from "../../../context/AuthContext";
-import DoctorCard from "../../../components/RenderDoctorCard";
+import DoctorCard from "../../../components/DoctorCard";
 import FilterModal from "../../../components/FilterModal";
 import { doctorService } from "../../../services/doctorService";
 import locationService from "../../../services/locationService";
@@ -28,7 +28,7 @@ const ExploreScreen = () => {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
-  const [location, setLocation] = useState(null);
+  const {location, setLocation} = useAuth();
   const [locationLoading, setLocationLoading] = useState(false);
 
   // Filter states
