@@ -17,7 +17,7 @@ const TabLayout = () => {
         tabBarStyle: {
           width: "90%",
           position: 'absolute',
-          bottom: 20,
+          bottom: "7%",
           borderRadius: 15,
           elevation: 10,
           marginLeft: "5%",
