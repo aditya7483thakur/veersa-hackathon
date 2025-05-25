@@ -13,6 +13,7 @@ import { useAuth } from "../../context/AuthContext";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Ionicons } from "@expo/vector-icons";
+import { appointmentService } from "../../services/appointmentService";
 
 // Skeleton Loading Component
 const AppointmentSkeleton = () => (
@@ -67,6 +68,23 @@ const AppointmentScreen = () => {
     } catch (error) {
       console.error("Error fetching appointments:", error);
       setError("Failed to load appointments. Please try again.");
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  };
+
+  const cancelAppointment = async (params) => {
+    try {
+      setLoading(true);
+      console.log(params);
+      const response = await appointmentService.cancelAppointment(params);
+      if (response.success) {
+        setDoctors(response.data);
+      }
+    } catch (error) {
+      console.error("Error deleting appointment:", error.message || error);
+      Alert.alert("Error", "Failed to deleting appointment. Please try again.");
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -250,7 +268,10 @@ const AppointmentScreen = () => {
 
               {/* Action Buttons */}
               <View className="flex-row justify-between pt-3 border-t border-gray-100">
-                <TouchableOpacity className="flex-row items-center bg-red-50 px-4 py-2 rounded-lg">
+                <TouchableOpacity
+                  onPress={() => cancelAppointment(appointment._id)}
+                  className="flex-row items-center bg-red-50 px-4 py-2 rounded-lg"
+                >
                   <AntDesign name="delete" size={16} color="red" />
                   <Text className="text-red-500 pl-1 font-medium">Cancel</Text>
                 </TouchableOpacity>
