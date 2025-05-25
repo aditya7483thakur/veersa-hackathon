@@ -14,6 +14,7 @@ const AuthProvider = ({ children }) => {
     accessToken: null,
     authenticated: false,
   });
+  const [location,setLocation]=useState(null)
 
   const checkAuthStatus = async () => {
     try {
@@ -135,6 +136,8 @@ const AuthProvider = ({ children }) => {
     accessToken:authState.accessToken,
     authenticated: authState.authenticated,
     checkAuthStatus,
+    location,
+    setLocation
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
