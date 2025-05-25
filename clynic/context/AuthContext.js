@@ -51,7 +51,7 @@ const AuthProvider = ({ children }) => {
   const register = async (user) => {
     try {
       const response = await axios.post(
-        `${process.env.EXPO_PUBLIC_API_URL}/auth/register`,
+        `${process.env.EXPO_PUBLIC_BACKED_API_URL}/auth/register`,
         {
           ...user,
         }
@@ -76,40 +76,37 @@ const AuthProvider = ({ children }) => {
     }
   };
 
-  const login = async ({ email, password }) => {
-    try {
-      const response = await axios.post(
-        `${process.env.EXPO_PUBLIC_API_URL}/auth/login`,
-        {
-          email,
-          password,
-        }
-      );
+ const login = async ({ email, password }) => {
+  try {
+    const response = await axios.post(
+      `${process.env.EXPO_PUBLIC_BACKED_API_URL}/auth/login`,
+      { email, password }
+    );
 
-      if (response.status !== 200) {
-        Alert.alert("Error", "Invalid Credentials");
-        return;
-      }
-      const { accessToken } = response.data;
+    const { accessToken } = response.data;
 
-      setAuthState({
-        accessToken,
-        authenticated: true,
-      });
+    setAuthState({
+      accessToken,
+      authenticated: true,
+    });
 
-      axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+    axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
 
-      await SecureStore.setItemAsync(
-        process.env.EXPO_PUBLIC_ACCESS_TOKEN_SECRET,
-        accessToken
-      );
+    await SecureStore.setItemAsync(
+      process.env.EXPO_PUBLIC_ACCESS_TOKEN_SECRET,
+      accessToken
+    );
 
-      return response;
-    } catch (error) {
-      Alert.alert("Error", error.message);
-      console.log(error);
-    }
-  };
+    return response;
+  } catch (error) {
+    // Log for debugging
+    console.log("Login error:", error);
+
+    // Don't alert here — handle that in handleSubmit
+    throw error; // <-- Important: Let the caller handle it
+  }
+};
+
 
   const logout = async () => {
     try {

@@ -48,16 +48,22 @@ const LoginScreen = () => {
     return valid;
   };
 
-  const handleSubmit = async () => {
-    if (!validate()) return;
+const handleSubmit = async () => {
+  if (!validate()) return;
 
-    try {
-      await login(form);
-      Alert.alert('Success', 'Successfully logged in!');
-    } catch (err) {
-      Alert.alert('Error', 'Login failed');
+  try {
+    const response = await login(form); 
+
+    if (response.status !== 200) {
+      Alert.alert("Error", "Invalid Credentials");
+      return;
     }
-  };
+    Alert.alert('Success', 'Successfully logged in!');
+
+  } catch (err) {
+    Alert.alert('Error', err?.response?.data?.message || 'Login failed');
+  }
+};
 
   return (
       <ScrollView contentContainerStyle={{

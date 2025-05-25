@@ -7,10 +7,11 @@ import {
 import { Colors } from '../constants/Colors';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { useEffect } from 'react';
 
 const DoctorCard = ({ item }) => {
     const navigation = useNavigation();
-    console.log(item.profilePhoto);
+
 
     return (
         <TouchableOpacity
@@ -29,20 +30,16 @@ const DoctorCard = ({ item }) => {
                     className="w-16 h-16 rounded-full items-center justify-center mr-4"
                     style={{ backgroundColor: Colors.bgColor(0.1) }}
                 >
-                    {item.profilePhoto ? (
+                    {item?.profilePhoto ? (
                         <Image
-                        // Publicly accessible URI
                             source={{ uri: "https://res.cloudinary.com/dkhbiyylo/image/upload/fl_preserve_transparency/v1748009059/avatar_aetfjt.jpg?_s=public-apps" }}
-                            className="w-16 h-16 rounded-full"
-                            resizeMode="cover"
+                            className="w-20 h-20 rounded-full"
+                            resizeMode='contain'
                         />
                     ) : (
-                        <Ionicons
-                            name="person"
-                            size={32}
-                            color={Colors.bgColor(1)}
-                        />
+                        <Ionicons name="person" size={36} color={"#3b82f6"} />
                     )}
+
                 </View>
 
                 <View className="flex-1">
@@ -53,7 +50,7 @@ const DoctorCard = ({ item }) => {
                         {item.specialization || 'General Practice'}
                     </Text>
                     <View className="flex-row gap-2 items-center">
-                        <Ionicons name="pulse" size={15} color={Colors.black(0.5)} style={{ marginTop: -7 }}/>
+                        <Ionicons name="pulse" size={15} color={Colors.black(0.5)} style={{ marginTop: -7 }} />
                         <Text className="text-xs mb-2" style={{ color: Colors.black(0.5) }}>
                             {item.hospitalName || 'Medical Center'}
                         </Text>
