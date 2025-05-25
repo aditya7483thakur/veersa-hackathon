@@ -4,6 +4,7 @@ import {
   Text,
   Image,
   TouchableOpacity,
+  Linking,
  
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -15,6 +16,20 @@ const DoctorProfile = () => {
   const route = useRoute();
   const navigation = useNavigation();
   const { doctor } = route.params || {};
+  console.log(doctor);
+
+  const handleBooking = () => {
+    navigation.navigate("Schedule", {
+      doctor: JSON.stringify(doctor)
+    });
+  };
+
+  const redirectToGoogleMaps = () => {
+      const doctorLat = doctor.location.coordinates[1];
+      const doctorLon = doctor.location.coordinates[0];
+      const url = `https://www.google.com/maps/dir/?api=1&destination=${doctorLat},${doctorLon}`;
+      Linking.openURL(url);
+  };
 
   return (
     <SafeAreaView className="flex-1 items-center justify-center bg-white px-4">
@@ -88,12 +103,12 @@ const DoctorProfile = () => {
         {/* Buttons */}
         <View className="justify-between">
           <CustomButton
-            handlePress={() => console.log("Get Directions")}
+            handlePress={redirectToGoogleMaps}
             text={"Get Directions"}
             otherStyles={{ marginBottom: -5 }}
           />
           <CustomButton
-            handlePress={() => console.log("Book Appointment")}
+            handlePress={handleBooking}
             text={"Book Appointment"}
             inverted={true}
           />
