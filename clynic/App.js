@@ -13,6 +13,10 @@ import * as Notifications from "expo-notifications";
 
 const RootStack = createNativeStackNavigator();
 
+import { LogBox } from 'react-native';
+
+LogBox.ignoreAllLogs(true); // Ignore all log notifications
+
 function AppNavigator() {
   const { authenticated, loading } = useAuth();
   useEffect(() => {
