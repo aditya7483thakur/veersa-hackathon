@@ -271,6 +271,7 @@ const validate = () => {
           onChangeText={(val) => handleChange(key, val)}
           editable={!loading}
           style={{ 
+            color: "#000" ,
             borderColor: errors[key] ? 'rgba(239, 68, 68, 1)' : 'rgba(209, 213, 219, 1)',
             minHeight: multiline ? 80 : 50,
             textAlignVertical: multiline ? 'top' : 'center',
