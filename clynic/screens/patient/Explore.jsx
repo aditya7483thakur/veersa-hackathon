@@ -7,12 +7,13 @@ import {
   StatusBar,
   RefreshControl,
   ActivityIndicator,
-  Alert
+  Alert,
+  Image
 } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-
+import { Images } from '../../constants/Images';
 import { Colors } from '../../constants/Colors';
 import { useAuth } from '../../context/AuthContext';
 import DoctorCard from '../../components/RenderDoctorCard';
@@ -101,7 +102,6 @@ const ExploreScreen = () => {
       setLoading(false);
     }
   };
-
 
   useEffect(() => {
     fetchAllDoctors();
@@ -200,19 +200,23 @@ const ExploreScreen = () => {
         <View className="px-6 pb-6">
           <View className="flex-row justify-between items-center mb-6">
             <View>
-              <Text className="text-2xl font-bold text-white">
-                Clynic
-              </Text>
+              <View className="flex-row gap-1 items-center">
+                <Image source={Images.logo} className="w-10 h-10" resizeMode='contain' />
+                <Text className="text-2xl font-bold text-white">
+                  Clynic
+                </Text>
+              </View>
               <Text className="text-white opacity-80">
                 Your Health, Our Priority
               </Text>
             </View>
             
-            <View className="flex-row items-center space-x-3">
+            <View className="flex-row items-center gap-2">
               {/* Location Button */}
               <TouchableOpacity
                 onPress={getUserLocation}
-                className="w-10 h-10 rounded-full bg-white bg-opacity-20 items-center justify-center"
+                className="w-10 h-10 rounded-full items-center justify-center"
+                style={{ backgroundColor: Colors.bgWhite(0.2), borderColor: Colors.bgWhite(0.6), borderWidth: 1 }}
                 disabled={locationLoading}
               >
                 {locationLoading ? (
@@ -220,16 +224,22 @@ const ExploreScreen = () => {
                 ) : (
                   <Ionicons
                     name={location ? "location" : "location-outline"}
-                    size={20}
-                    color={location ? "#4CAF50" : Colors.bgWhite(1)}
+                    size={18}
+                    color={Colors.bgWhite(1)}
                   />
                 )}
               </TouchableOpacity>
               
               {/* Logout Button */}
               <TouchableOpacity
-                onPress={logout}
-                className="w-10 h-10 rounded-full bg-white bg-opacity-20 items-center justify-center"
+                onPress={() => {
+                  Alert.alert("Confirm Sign out", "Are you sure you want to sign out?", [{
+                    text: "Okay",
+                    onPress: logout
+                  }], {cancelable: true})
+                }}
+                className="w-10 h-10 rounded-full items-center justify-center"
+                style={{ backgroundColor: Colors.bgWhite(0.2), borderColor: Colors.bgWhite(0.6), borderWidth: 1 }}
               >
                 <Ionicons
                   name="power"
@@ -249,7 +259,7 @@ const ExploreScreen = () => {
               shadowOpacity: 0.1,
               shadowRadius: 8,
               elevation: 3,
-              backgroundColor: Colors.bgWhite(0.95)
+              backgroundColor: Colors.bgWhite(0.9)
             }}
           >
             <Ionicons name="search" size={20} color={Colors.black(0.4)} />
@@ -272,7 +282,7 @@ const ExploreScreen = () => {
           {/* Location Status */}
           {location && (
             <View className="flex-row items-center mt-2 px-2">
-              <Ionicons name="location" size={16} color="#4CAF50" />
+              <Ionicons name="location" size={16} color="#fff" />
               <Text className="text-white opacity-80 ml-1 text-sm">
                 Location enabled - showing nearby results
               </Text>
@@ -282,7 +292,7 @@ const ExploreScreen = () => {
           {/* Active Filters Indicator */}
           {hasActiveFilters() && (
             <View className="flex-row items-center mt-2 px-2">
-              <Ionicons name="funnel" size={16} color="#4CAF50" />
+              <Ionicons name="funnel" size={16} color="#fff" />
               <Text className="text-white opacity-80 ml-1 text-sm">
                 Filters applied
               </Text>
