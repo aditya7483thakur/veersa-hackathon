@@ -1,4 +1,4 @@
-import { View } from 'react-native';
+import { Dimensions, View } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import AppointmentScreen from './patient/Appointments';
 import AskAIScreen from './patient/AskAI';
@@ -15,19 +15,19 @@ const TabLayout = () => {
       screenOptions={{
         tabBarShowLabel: false,
         tabBarStyle: {
-          padding: 4,
-          marginBottom: 20, 
           width: "90%",
-          borderRadius: 10,
-          alignSelf: "center",
-          justifyContent: "center",
-          borderTopWidth: 0,
+          position: 'absolute',
+          bottom: 20,
+          borderRadius: 15,
+          elevation: 10,
+          marginLeft: "5%",
+          backgroundColor: '#fff',
           height: 60,
-          elevation: 5,
-          justifyContent: "center",
+          borderTopWidth: 0,
           shadowColor: Colors.bgColor(1),
-          backgroundColor: "#fff",
-          zIndex: 5
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.5,
+          shadowRadius: 5,
         },
         headerShown: false,
       }}
