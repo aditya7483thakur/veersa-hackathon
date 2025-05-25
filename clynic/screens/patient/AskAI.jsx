@@ -1,4 +1,4 @@
-import { View, Text, StatusBar, TouchableOpacity, ActivityIndicator, TextInput, FlatList, Alert } from 'react-native'
+import { View, Text, StatusBar, TouchableOpacity, ActivityIndicator, TextInput, FlatList, Alert, ScrollView } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors } from '../../constants/Colors';
@@ -46,7 +46,7 @@ const AskAIScreen = () => {
         .map(point => `• ${point.trim()}`)
         .join('\n\n');
 
-      setFirstAid(bulletPoints); 
+      setFirstAid(bulletPoints);
       setDoctors(doctors);
       setHasSearched(true);
 
@@ -82,7 +82,7 @@ const AskAIScreen = () => {
     if (searchLoading) {
       return (
         <View className="flex-1 justify-center items-center py-20">
-          <ActivityIndicator size="large" color={Colors.bgColor(1)} />
+          {/* <ActivityIndicator size="large" color={Colors.bgColor(1)} /> */}
           <Text className="mt-4 text-base" style={{ color: Colors.black(0.6) }}>
             Searching doctors...
           </Text>
@@ -175,7 +175,7 @@ const AskAIScreen = () => {
         </View>
 
         {/* Results Section */}
-        <View className="flex-1" style={{ backgroundColor: Colors.bgWhite(0.95) }}>
+        <ScrollView className="flex-1 mb-16" style={{ backgroundColor: Colors.bgWhite(0.95) }}>
           {hasSearched && firstAid && (
             <View
               className="bg-white mx-4 mt-4 mb-2 p-4 rounded-2xl shadow-sm"
@@ -209,7 +209,7 @@ const AskAIScreen = () => {
             refreshing={searchLoading}
             onRefresh={() => searchDoctors(searchQuery)}
           />
-        </View>
+        </ScrollView>
       </SafeAreaView>
     </>
   )

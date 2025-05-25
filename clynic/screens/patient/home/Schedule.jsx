@@ -327,18 +327,21 @@ const AppointmentBooking = () => {
     notificationDate.setHours(notificationDate.getHours() - 1); // 1 hour before appointment
 
     await Notifications.scheduleNotificationAsync({
-      content: {
-        title: "Upcoming Appointment Reminder",
-        body: `You have an appointment with Dr. ${doctorName} in 1 hour.`,
-        data: {
-          appointmentDate: appointmentDate,
-          latitude: latitude,
-          longitude: longitude,
-        },
-      },
-      trigger: notificationDate,
-    });
-  }
+        content: {
+            title: "Upcoming Appointment Reminder",
+                body: `You have an appointment with ${doctorName} in 1 hour.`,
+                data: {
+                    appointmentDate: appointmentDate,
+                    latitude: latitude,
+                    longitude: longitude,
+                },
+            },
+            trigger: {
+                type: 'date',
+                date: new Date(appointmentDate),
+            },
+        });
+    }
 
   function setNotificationHandler() {
     Notifications.setNotificationHandler({

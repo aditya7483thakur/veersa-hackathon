@@ -202,7 +202,7 @@ const ExploreScreen = () => {
     <>
       <StatusBar backgroundColor={Colors.bgColor(1)} barStyle="light-content" />
       <SafeAreaView
-        className="flex-1 pt-5"
+        className="flex-1 pt-5 "
         style={{ backgroundColor: Colors.bgColor(1) }}
       >
         {/* Header */}
@@ -329,7 +329,7 @@ const ExploreScreen = () => {
 
         {/* Available Doctors Section */}
         <View
-          className="flex-1 rounded-t-3xl pt-6"
+          className="flex-1 rounded-t-3xl pt-6 mb-6"
           style={{ backgroundColor: Colors.bgWhite(0.95) }}
         >
           <Text
