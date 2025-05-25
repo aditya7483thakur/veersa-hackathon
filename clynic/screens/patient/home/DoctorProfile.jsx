@@ -32,7 +32,7 @@ const DoctorProfile = () => {
   };
 
   return (
-    <SafeAreaView className="flex-1 items-center justify-center bg-white px-4">
+    <SafeAreaView className="flex-1 items-center justify-center bg-white px-4 ">
       <StatusBar backgroundColor={Colors.bgColor(1)} barStyle={"light-content"} />
       <TouchableOpacity 
         className="w-10 h-10 self-start mx-5 mb-5 mt-[-10%] rounded-full items-center justify-center" 
@@ -46,7 +46,7 @@ const DoctorProfile = () => {
           color={"#fff"}
         />
       </TouchableOpacity>
-      <View className="bg-[#edf4ff] w-full max-w-sm rounded-3xl p-6 gap-4">
+      <View className="bg-[#edf4ff] w-full max-w-sm rounded-3xl p-6 gap-4 mb-6">
         {/* Profile Image */}
         <View className="items-center">
           <View
