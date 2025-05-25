@@ -103,6 +103,7 @@ const OnboardingScreens = () => {
                 pages={onboardingPages}
                 containerStyles={{ flex: 1, paddingHorizontal: 20 }}
                 DoneButtonComponent={doneButton}
+                bottomBarHeight={100} 
                 bottomBarColor="#fff"
                 nextLabel={
                     <View 

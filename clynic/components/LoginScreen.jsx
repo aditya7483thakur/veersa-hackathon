@@ -81,6 +81,7 @@ const handleSubmit = async () => {
           keyboardType="email-address"
           value={form.email}
           onChangeText={(val) => handleChange('email', val)}
+          placeholderTextColor="#9ca3af"
         />
         {errors.email && <Text className="text-red-500 mb-2 text-sm">{errors.email}</Text>}
 
@@ -90,6 +91,7 @@ const handleSubmit = async () => {
           secureTextEntry
           value={form.password}
           onChangeText={(val) => handleChange('password', val)}
+          placeholderTextColor="#9ca3af"
         />
         {errors.password && <Text className="text-red-500 mb-2 text-sm">{errors.password}</Text>}
 
