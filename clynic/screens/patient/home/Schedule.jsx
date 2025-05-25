@@ -162,6 +162,16 @@ const AppointmentBooking = () => {
   };
   const [isBooking, setIsBooking] = useState(false);
 
+  const sendSuccessNotification = async (doctorName, slot) => {
+    await Notifications.scheduleNotificationAsync({
+      content: {
+        title: "Appointment Confirmed ✅",
+        body: `Your appointment with ${doctorName} at ${slot} is confirmed.`,
+      },
+      trigger: null, // null means send immediately
+    });
+  };
+
   const handleSlotPress = (slot) => {
     Alert.alert(
       "Confirm Appointment",
@@ -178,6 +188,27 @@ const AppointmentBooking = () => {
       ]
     );
   };
+
+  const scheduleReminderNotification = async (
+    appointmentDate,
+    doctorName,
+    lat,
+    lng
+  ) => {
+    const triggerTime = new Date(appointmentDate.getTime() - 60 * 60 * 1000);
+    // const triggerTime = new Date(Date.now() + 1 * 60 * 1000);
+    const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+
+    await Notifications.scheduleNotificationAsync({
+      content: {
+        title: "Appointment Reminder",
+        body: `Your appointment with Dr. ${doctorName} is in 1 hour.`,
+        data: { url: mapsUrl }, // this will be used when tapping
+      },
+      trigger: triggerTime,
+    });
+  };
+
   // function that handles the appointment booking process
   const bookAppointment = async (slot) => {
     if (!calendarId) {
@@ -216,7 +247,13 @@ const AppointmentBooking = () => {
           parsedDoctor.location.coordinates[1],
           parsedDoctor.location.coordinates[0]
         );
-
+        await sendSuccessNotification(parsedDoctor.doctorName, slot);
+        await scheduleReminderNotification(
+          appointmentDate,
+          parsedDoctor.doctorName,
+          parsedDoctor.location.coordinates[1],
+          parsedDoctor.location.coordinates[0]
+        );
         Alert.alert("Success", "Appointment booked successfully!");
       } else if (response.status === 400) {
         Alert.alert(

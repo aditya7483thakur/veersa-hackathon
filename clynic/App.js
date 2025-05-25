@@ -7,12 +7,26 @@ import AuthProvider, { useAuth } from "./context/AuthContext";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import "./global.css";
 import TabLayout from "./screens/TabLayout";
+import { useEffect } from "react";
+import { Linking } from "react-native";
+import * as Notifications from "expo-notifications";
 
 const RootStack = createNativeStackNavigator();
 
 function AppNavigator() {
   const { authenticated, loading } = useAuth();
+  useEffect(() => {
+    const subscription = Notifications.addNotificationResponseReceivedListener(
+      (response) => {
+        const url = response.notification.request.content.data.url;
+        if (url) {
+          Linking.openURL(url);
+        }
+      }
+    );
 
+    return () => subscription.remove();
+  }, []);
   // Show splash while loading
   if (loading) {
     return (
