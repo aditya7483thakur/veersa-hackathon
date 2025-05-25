@@ -2,6 +2,8 @@
 
 **Clynic** is a real-time healthcare application that helps users find nearby doctors and book appointments with specialists online. With a user-friendly interface and AI-powered features, Clynic makes healthcare more accessible, efficient, and personalized.
 
+apk- https://drive.google.com/file/d/1NWNnNw4ISclwcjmV1gOxrbfWcS57GY5X/view?usp=drivesdk 
+
 ### (The server takes 1 to 2 minutes to load on inital request so, it might take a while to process your first request.)
 
 ## Key Features
