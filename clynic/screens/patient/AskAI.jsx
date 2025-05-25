@@ -175,7 +175,7 @@ const AskAIScreen = () => {
         </View>
 
         {/* Results Section */}
-        <ScrollView className="flex-1 mb-12" style={{ backgroundColor: Colors.bgWhite(0.95) }}>
+        <ScrollView className="flex-1 mb-16" style={{ backgroundColor: Colors.bgWhite(0.95) }}>
           {hasSearched && firstAid && (
             <View
               className="bg-white mx-4 mt-4 mb-2 p-4 rounded-2xl shadow-sm"
