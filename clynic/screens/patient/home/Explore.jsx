@@ -232,6 +232,7 @@ const ExploreScreen = () => {
                   borderColor: Colors.bgWhite(0.6),
                   borderWidth: 1,
                 }}
+                activeOpacity={0.7}
                 disabled={locationLoading}
               >
                 {locationLoading ? (
@@ -266,6 +267,7 @@ const ExploreScreen = () => {
                   borderColor: Colors.bgWhite(0.6),
                   borderWidth: 1,
                 }}
+                activeOpacity={0.7}
               >
                 <Ionicons name="power" size={20} color={Colors.bgWhite(1)} />
               </TouchableOpacity>
@@ -292,7 +294,7 @@ const ExploreScreen = () => {
               value={searchQuery}
               onChangeText={setSearchQuery}
             />
-            <TouchableOpacity onPress={() => setShowFilters(true)}>
+            <TouchableOpacity onPress={() => setShowFilters(true)} activeOpacity={0.7}>
               <Ionicons
                 name="options"
                 size={20}
@@ -318,8 +320,8 @@ const ExploreScreen = () => {
               <Text className="text-white opacity-80 ml-1 text-sm">
                 Filters applied
               </Text>
-              <TouchableOpacity onPress={resetFilters} className="ml-2">
-                <Text className="text-white underline text-sm">Clear</Text>
+              <TouchableOpacity onPress={resetFilters} className="ml-2" activeOpacity={0.7}>
+                <Text className="text-white underline text-sm">Clear filters</Text>
               </TouchableOpacity>
             </View>
           )}

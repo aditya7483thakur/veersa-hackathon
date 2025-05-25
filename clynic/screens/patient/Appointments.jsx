@@ -5,6 +5,7 @@ import {
   ScrollView,
   ActivityIndicator,
   SafeAreaView,
+  Linking,
 } from "react-native";
 import Entypo from "@expo/vector-icons/Entypo";
 import { Colors } from "../../constants/Colors";
@@ -82,6 +83,11 @@ const AppointmentScreen = () => {
   const handleRefresh = () => {
     fetchAppointments(true);
   };
+
+  const handleGeoLocation = ({ latitude, longitude }) => {
+    const url = `https://www.google.com/maps/dir/?api=1&destination=${latitude},${longitude}`;
+    Linking.openURL(url);
+  }
 
   // Loading Screen
   if (loading) {
@@ -186,7 +192,7 @@ const AppointmentScreen = () => {
             {refreshing ? (
               <ActivityIndicator size="small" color="#3B82F6" />
             ) : (
-              <Text className="text-blue-600 font-bold">
+              <Text className="font-bold" style={{ color: Colors.bgColor(0.8) }}>
                 <Ionicons name="reload" size={15} color={Colors.bgColor(1)} />
               </Text>
             )}
@@ -222,8 +228,8 @@ const AppointmentScreen = () => {
               {/* Time and Date Header */}
               <View className="flex-row items-center justify-between mb-3">
                 <View className="flex-row items-center">
-                  <View className="bg-blue-50 px-3 py-1 rounded-full mr-3">
-                    <Text className="text-blue-600 font-semibold text-sm">
+                  <View className="px-3 py-1 rounded-full mr-3" style={{ backgroundColor: Colors.bgColor(0.1) }}>
+                    <Text className="font-semibold text-sm" style={{ color: Colors.bgColor(0.8) }}>
                       {appointment.timeSlot}
                     </Text>
                   </View>
@@ -238,7 +244,10 @@ const AppointmentScreen = () => {
                 <Text className="text-lg font-bold text-gray-900 mb-1">
                   {appointment.doctor_id.doctorName}
                 </Text>
-                <Text className="text-blue-600 font-medium text-sm mb-2">
+                <Text className="text-gray-400 text-xs flex-1 leading-5">
+                    {appointment.doctor_id.description}.
+                  </Text>
+                <Text className="font-medium text-sm mb-2" style={{ color: Colors.bgColor(0.8) }}>
                   {appointment.doctor_id.specialization}
                 </Text>
                 <View className="flex-row items-start">
@@ -250,12 +259,16 @@ const AppointmentScreen = () => {
 
               {/* Action Buttons */}
               <View className="flex-row justify-between pt-3 border-t border-gray-100">
-                <TouchableOpacity className="flex-row items-center bg-red-50 px-4 py-2 rounded-lg">
+                <TouchableOpacity className="flex-row items-center bg-red-50 px-4 py-2 rounded-lg" activeOpacity={0.7}>
                   <AntDesign name="delete" size={16} color="red" />
                   <Text className="text-red-500 pl-1 font-medium">Cancel</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity className="flex-row items-center bg-gray-50 px-4 py-2 rounded-lg">
+                <TouchableOpacity 
+                  className="flex-row items-center bg-gray-100 px-4 py-2 rounded-lg"
+                  activeOpacity={0.7}
+                  onPress={() => handleGeoLocation(appointment?.doctor_id?.location?.coordinates[1], appointment?.doctor_id?.location?.coordinates[0])}
+                >
                   <Entypo name="location" size={16} color="black" />
                   <Text className="text-gray-600 pl-1 font-medium">
                     Directions

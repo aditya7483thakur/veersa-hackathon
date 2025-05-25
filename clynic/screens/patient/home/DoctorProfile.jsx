@@ -5,6 +5,7 @@ import {
   Image,
   TouchableOpacity,
   Linking,
+  StatusBar,
  
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -25,14 +26,15 @@ const DoctorProfile = () => {
   };
 
   const redirectToGoogleMaps = () => {
-      const doctorLat = doctor.location.coordinates[1];
-      const doctorLon = doctor.location.coordinates[0];
-      const url = `https://www.google.com/maps/dir/?api=1&destination=${doctorLat},${doctorLon}`;
-      Linking.openURL(url);
+    const doctorLat = doctor.location.coordinates[1];
+    const doctorLon = doctor.location.coordinates[0];
+    const url = `https://www.google.com/maps/dir/?api=1&destination=${doctorLat},${doctorLon}`;
+    Linking.openURL(url);
   };
 
   return (
     <SafeAreaView className="flex-1 items-center justify-center bg-white px-4">
+      <StatusBar backgroundColor={Colors.bgColor(1)} barStyle={"light-content"} />
       <TouchableOpacity 
         className="w-10 h-10 self-start mx-5 mb-5 mt-[-10%] rounded-full items-center justify-center" 
         style={{ backgroundColor: Colors.bgColor(0.8) }}
@@ -66,6 +68,12 @@ const DoctorProfile = () => {
             {doctor?.doctorName || 'Dr. Unknown'}
           </Text>
           <Text className="text-gray-500 text-sm">{doctor?.specialization || 'General Practice'}</Text>
+        </View>
+
+        <View>
+          <Text className="text-gray-500 text-xs self-center text-center w-[90%]">
+            {doctor?.description || "About"}
+          </Text>
         </View>
 
         {/* Experience */}
