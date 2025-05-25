@@ -191,7 +191,7 @@ const AppointmentScreen = () => {
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-50 pb-10">
+    <SafeAreaView className="flex-1 bg-gray-50 pb-10 mb-16">
       {/* Header */}
       <View
         className="px-6 pt-12 pb-4 shadow-sm"
@@ -225,7 +225,7 @@ const AppointmentScreen = () => {
 
       {/* Appointments List */}
       <ScrollView
-        className="flex-1 px-4 pt-4"
+        className="flex-1 px-4 pt-4 "
         showsVerticalScrollIndicator={false}
       >
         {appointments.length === 0 ? (

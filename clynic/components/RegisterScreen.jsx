@@ -267,6 +267,7 @@ const validate = () => {
           secureTextEntry={secureTextEntry}
           multiline={multiline}
           value={form[key]}
+          placeholderTextColor="#9ca3af"
           onChangeText={(val) => handleChange(key, val)}
           editable={!loading}
           style={{ 
