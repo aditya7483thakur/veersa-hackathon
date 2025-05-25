@@ -23,7 +23,7 @@ const DoctorCard = ({ item }) => {
                 shadowRadius: 8,
                 elevation: 3,
             }}
-            onPress={() => navigation.navigate("doctor-profile", { doctor: item })}
+            onPress={() => navigation.navigate("DoctorProfile", { doctor: item })}
         >
             <View className="flex-row items-center">
                 <View

@@ -1,12 +1,10 @@
-import { View, Text, TouchableOpacity, } from 'react-native';
-import { useAuth } from '../context/AuthContext';
+import { View } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import ExploreScreen from './patient/Explore';
 import AppointmentScreen from './patient/Appointments';
 import AskAIScreen from './patient/AskAI';
 import { Colors } from '../constants/Colors';
-import Indicator from '../components/Indicator';
 import {AntDesign, FontAwesome5} from '@expo/vector-icons';
+import ExploreLayout from './patient/ExploreLayout';
 
 const Tab = createBottomTabNavigator();
 
@@ -33,11 +31,11 @@ const TabLayout = () => {
         },
         headerShown: false,
       }}
-      initialRouteName="Explore"
+      initialRouteName="ExploreTabs"
     >
       <Tab.Screen
-        name="Explore"
-        component={ExploreScreen}
+        name="ExploreTabs"
+        component={ExploreLayout}
         options={{
           headerShown: false,
           tabBarIcon: ({ focused }) => (

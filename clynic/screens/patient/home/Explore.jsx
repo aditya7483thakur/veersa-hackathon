@@ -13,13 +13,13 @@ import {
 import React, { useState, useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { Images } from '../../constants/Images';
-import { Colors } from '../../constants/Colors';
-import { useAuth } from '../../context/AuthContext';
-import DoctorCard from '../../components/RenderDoctorCard';
-import FilterModal from '../../components/FilterModal';
-import { doctorService } from '../../services/doctorService';
-import locationService from '../../services/locationService';
+import { Images } from '../../../constants/Images';
+import { Colors } from '../../../constants/Colors';
+import { useAuth } from '../../../context/AuthContext';
+import DoctorCard from '../../../components/RenderDoctorCard';
+import FilterModal from '../../../components/FilterModal';
+import { doctorService } from '../../../services/doctorService';
+import locationService from '../../../services/locationService';
 
 const ExploreScreen = () => {
   const [doctors, setDoctors] = useState([]);
