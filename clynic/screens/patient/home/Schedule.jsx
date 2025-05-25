@@ -6,6 +6,7 @@ import {
     ScrollView,
     Alert,
     Platform,
+    StatusBar,
 } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import * as ExpoCalendar from "expo-calendar";
@@ -15,6 +16,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import * as Notifications from "expo-notifications";
 import * as Device from "expo-device";
 import * as Linking from 'expo-linking';
+import { Colors } from "../../../constants/Colors";
 
 
 const AppointmentBooking = () => {
@@ -245,7 +247,7 @@ const AppointmentBooking = () => {
                 name: 'default',
                 importance: Notifications.AndroidImportance.MAX,
                 vibrationPattern: [0, 250, 250, 250],
-                lightColor: '#FF231F7C',
+                lightColor: Colors.bgColor(0.5),
             });
         }
 
@@ -307,27 +309,34 @@ const AppointmentBooking = () => {
 
 
     return (
-        <SafeAreaView className="flex-1">
-            <ScrollView className="flex-1 bg-blue-100 p-4">
-                <View className="bg-white p-4 mb-4 rounded-lg shadow-md  py-2">
-                    <Text className="text-xl text-blue-700 font-poppins-bold">
+        <SafeAreaView className="flex-1 bg-white">
+            <StatusBar backgroundColor={Colors.bgColor(1)} barStyle={"light-content"} />
+            <View>
+                <Text className="text-3xl font-bold mx-8 mt-3" style={{ color: Colors.bgColor(0.8) }}>
+                    Scheduler
+                </Text>
+                <Text className="text-sm text-gray-400 mx-8 mb-5">Schedule your appointment with Clynic</Text>
+            </View>
+            <ScrollView className="flex-1 p-5 pt-2 bg-white" contentContainerStyle={{ paddingBottom: 150 }} showsVerticalScrollIndicator={false}>
+                <View className="bg-white p-5 mb-4 rounded-lg shadow-lg gap-1 py-2">
+                    <Text className="text-xl font-bold" style={{ color: Colors.bgColor(0.8) }}>
                         {parsedDoctor.doctorName}
                     </Text>
-                    <Text className="text-base font-poppins-regular text-neutral-700">
+                    <Text className="text-sm text-neutral-500">
                         {parsedDoctor.specialization}
                     </Text>
-                    <Text className="text-base font-poppins-regular text-neutral-700">
+                    <Text className="text-sm text-neutral-500">
                         {parsedDoctor.hospitalName},{" "}
                         {parsedDoctor.hospitalAddress}
                     </Text>
-                    <Text className="text-base font-poppins-regular text-neutral-700">
+                    <Text className="text-lg text-neutral-700">
                         ₹ {parsedDoctor.fees}
                     </Text>
                 </View>
 
                 <View className="mb-4">
                     <RNCalendar
-                    className="rounded-lg font-poppins-regular"
+                        className=""
                         current={new Date().toISOString().split("T")[0]}
                         minDate={
                             new Date(
@@ -351,7 +360,7 @@ const AppointmentBooking = () => {
                         markedDates={{
                             [selectedDate]: {
                                 selected: true,
-                                selectedColor: "#2563eb",
+                                selectedColor: Colors.bgColor(0.8),
                             },
                         }}
                     />
@@ -359,20 +368,21 @@ const AppointmentBooking = () => {
 
                 {selectedDate && (
                     <View>
-                        <Text className="text-xl font-poppins-bold text-blue-800 mb-2">
+                        <Text className="text-xl text-gray-600 font-semibold mb-2">
                             Available Slots:
                         </Text>
                         {loading ? (
-                            <Text className="text-gray-600 text-start text-lg font-poppins-regular">
+                            <Text className="text-gray-500 text-start text-sm">
                                 Loading...
                             </Text>
                         ) : slotsFetched ? (
                             generateSlots().length > 0 ? (
-                                <View className="flex-wrap flex-row justify-between gap-y-2">
+                                <View className="flex-wrap flex-row justify-between gap-y-3">
                                     {generateSlots().map((slot, index) => (
                                         <TouchableOpacity
                                             key={index}
-                                            className="bg-blue-600 p-2 rounded w-40"
+                                            className="p-3 rounded-lg w-[47%]"
+                                            style={{ backgroundColor: Colors.bgColor(0.8) }}
                                             onPress={() =>
                                                 bookAppointment(slot)
                                             }
@@ -384,7 +394,7 @@ const AppointmentBooking = () => {
                                     ))}
                                 </View>
                             ) : (
-                                <Text className="text-blue-700 text-center">
+                                <Text className="text-center" style={{ color: Colors.bgColor(0.8) }}>
                                     No slots available
                                 </Text>
                             )
@@ -393,7 +403,7 @@ const AppointmentBooking = () => {
                 )}
 
                 {!selectedDate && (
-                    <Text className="text-blue-700 text-center text-base font-poppins-regular">
+                    <Text className="text-sm text-center" style={{ color: Colors.bgColor(0.8) }}>
                         Please select a date to view available slots.
                     </Text>
                 )}
