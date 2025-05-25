@@ -22,7 +22,8 @@ import locationService from '../../services/locationService';
 
 const ExploreScreen = () => {
   const [doctors, setDoctors] = useState([]);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [filteredDoctors, setFilteredDoctors] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
@@ -190,20 +191,17 @@ const ExploreScreen = () => {
 
   return (
     <>
-      <StatusBar
-        backgroundColor={Colors.bgColor(1)}
-        barStyle="light-content"
-      />
+      <StatusBar backgroundColor={Colors.bgColor(1)} barStyle="light-content" />
       <SafeAreaView
-        className="flex-1"
+        className="flex-1 pt-5"
         style={{ backgroundColor: Colors.bgColor(1) }}
       >
         {/* Header */}
-        <View className="px-4 pb-6">
+        <View className="px-6 pb-6">
           <View className="flex-row justify-between items-center mb-6">
             <View>
               <Text className="text-2xl font-bold text-white">
-                MediLink
+                Clynic
               </Text>
               <Text className="text-white opacity-80">
                 Your Health, Our Priority
@@ -244,20 +242,17 @@ const ExploreScreen = () => {
 
           {/* Search Bar */}
           <View
-            className="bg-white rounded-2xl px-4 py-3 flex-row items-center"
+            className="rounded-xl px-4 py-1 flex-row items-center"
             style={{
               shadowColor: Colors.black(0.1),
               shadowOffset: { width: 0, height: 2 },
               shadowOpacity: 0.1,
               shadowRadius: 8,
               elevation: 3,
+              backgroundColor: Colors.bgWhite(0.95)
             }}
           >
-            <Ionicons
-              name="search"
-              size={20}
-              color={Colors.black(0.4)}
-            />
+            <Ionicons name="search" size={20} color={Colors.black(0.4)} />
             <TextInput
               className="flex-1 ml-3 text-base"
               placeholder="Search doctors, specialties..."
@@ -304,7 +299,7 @@ const ExploreScreen = () => {
           style={{ backgroundColor: Colors.bgWhite(0.95) }}
         >
           <Text
-            className="text-xl font-bold mb-4 px-4"
+            className="text-xl font-bold mb-4 px-5"
             style={{ color: Colors.bgColor(1) }}
           >
             Available Doctors
@@ -345,7 +340,7 @@ const ExploreScreen = () => {
                   colors={[Colors.bgColor(1)]}
                 />
               }
-              contentContainerStyle={{ paddingBottom: 100 }}
+              contentContainerStyle={{ paddingBottom: 50 }}
             />
           )}
         </View>
