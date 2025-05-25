@@ -5,9 +5,11 @@ import { Colors } from '../../constants/Colors';
 import locationService from '../../services/locationService';
 import { Ionicons } from '@expo/vector-icons';
 import DoctorCard from '../../components/DoctorCard';
+import { useAuth } from '../../context/AuthContext';
+import axios from 'axios';
 
 const AskAIScreen = () => {
-  const [location, setLocation] = useState(null);
+  const {location, setLocation} = useAuth();
   const [locationLoading, setLocationLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [doctors, setDoctors] = useState([]);
@@ -15,20 +17,6 @@ const AskAIScreen = () => {
   const [hasSearched, setHasSearched] = useState(false);
 
   // Replace with your actual API base URL
-  const API_BASE_URL = 'http://your-backend-url.com/api';
-
-  const getUserLocation = async () => {
-    try {
-      setLocationLoading(true);
-      const userLocation = await locationService.getCurrentLocation();
-      setLocation(userLocation);
-    } catch (error) {
-      console.error('Error getting location:', error);
-      Alert.alert('Location Error', error.message);
-    } finally {
-      setLocationLoading(false);
-    }
-  };
 
   const searchDoctors = async (query) => {
     if (!query.trim()) {
@@ -53,21 +41,11 @@ const AskAIScreen = () => {
 
       console.log(params.toString())
 
-      // const response = await fetch(`${API_BASE_URL}/ai-seek?${params.toString()}`, {
-      //   method: 'GET',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      // });
+      const response = await axios.get(`${process.env.EXPO_PUBLIC_BACKED_API_URL}/doctor/ask-ai?${params.toString()}`);
+      const data = response.data;
 
-      // if (!response.ok) {
-      //   throw new Error(`HTTP error! status: ${response.status}`);
-      // }
-
-      // const data = await response.json();
-      
-      // const doctorsData = data.doctors || data || [];
-      // setDoctors(doctorsData);
+      const doctorsData = data.doctors || data || [];
+      setDoctors(doctorsData);
       setHasSearched(true);
       console.log("done")
       
@@ -90,17 +68,14 @@ const AskAIScreen = () => {
     return () => clearTimeout(timeoutId);
   }, [searchQuery, location]);
 
-  useEffect(() => {
-    getUserLocation();
-  }, []);
+
 
   const handleSearch = (text) => {
     setSearchQuery(text);
-    getUserLocation()
   };
 
   const renderDoctorItem = ({ item }) => (
-    <DoctorCard item={item} />
+    <DoctorCard item={item} isAiCard={true}/>
   );
 
   const renderEmptyComponent = () => {
