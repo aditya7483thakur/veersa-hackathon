@@ -1,12 +1,11 @@
 import { Appointment } from "../models/Appointment.js";
 import { Doctor } from "../models/Doctor.js";
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 dotenv.config();
 import Groq from "groq-sdk";
 const groq = new Groq({
-  apiKey:process.env.GROQ_API_KEY
+  apiKey: process.env.GROQ_API_KEY,
 });
-
 
 export const getAllDoctors = async (req, res) => {
   try {
@@ -163,7 +162,9 @@ export const aiIntegrate = async (req, res) => {
     const userLon = parseFloat(req.query.longitude);
 
     if (!text?.trim()) {
-      return res.status(400).json({ error: "Text query parameter is required" });
+      return res
+        .status(400)
+        .json({ error: "Text query parameter is required" });
     }
 
     const doctors = await Doctor.find().exec();
@@ -172,7 +173,9 @@ export const aiIntegrate = async (req, res) => {
     const doctorProfiles = doctors.map((doctor, index) => ({
       id: index,
       doctorId: doctor._id,
-      profile: `#${index}: ${doctor.doctorName || doctor.name}, ${doctor.specialization}, ${doctor.city}, ${doctor.experience}yrs. ${doctor.description || ''}`,
+      profile: `#${index}: ${doctor.doctorName || doctor.name}, ${
+        doctor.specialization
+      }, ${doctor.city}, ${doctor.experience}yrs. ${doctor.description || ""}`,
     }));
 
     // Construct optimized AI prompt
@@ -181,7 +184,7 @@ Match the user query with doctors and score each out of 10 based on relevance.
 User Query: "${text}"
 
 Doctors:
-${doctorProfiles.map(doc => doc.profile).join('\n')}
+${doctorProfiles.map((doc) => doc.profile).join("\n")}
 
 Task: Analyze the patient's query and score the doctors from most relevant to least relevant based on:
 1. Medical specialty match
@@ -192,6 +195,11 @@ Task: Analyze the patient's query and score the doctors from most relevant to le
 Return a JSON object with doctor index as key and relevance score (0-10) as value.
 Example: {"0": 9.2, "3": 7.5, "1": 6.0}
 Only return JSON.
+
+Also provide a brief first-aid or guidance suggestion (max 5 lines) relevant to the user's condition.
+Return it in this format after the JSON:
+FirstAid: <Your suggestion here>
+
 `.trim();
 
     const completion = await groq.chat.completions.create({
@@ -204,10 +212,20 @@ Only return JSON.
     const aiResponse = completion.choices[0]?.message?.content || "";
     console.log("AI Response:", aiResponse);
 
+    // Extract JSON part
     let relevanceScores = {};
+    let firstAidSuggestion = null;
+
     try {
-      const match = aiResponse.match(/\{[\s\S]*?\}/);
-      relevanceScores = JSON.parse(match?.[0] || "{}");
+      const jsonMatch = aiResponse.match(/\{[\s\S]*?\}/);
+      if (jsonMatch) {
+        relevanceScores = JSON.parse(jsonMatch[0]);
+      }
+
+      const firstAidMatch = aiResponse.match(/FirstAid:\s*(.*)/i);
+      if (firstAidMatch) {
+        firstAidSuggestion = firstAidMatch[1].trim();
+      }
     } catch (err) {
       console.error("AI response parsing error:", err);
       relevanceScores = Object.fromEntries(
@@ -219,7 +237,9 @@ Only return JSON.
     const scoredDoctors = Object.entries(relevanceScores)
       .map(([index, score]) => {
         const docProfile = doctorProfiles[parseInt(index)];
-        const doc = doctors.find(d => d._id.toString() === docProfile?.doctorId.toString());
+        const doc = doctors.find(
+          (d) => d._id.toString() === docProfile?.doctorId.toString()
+        );
         return doc ? { doctor: doc, score: parseFloat(score) } : null;
       })
       .filter(Boolean)
@@ -227,7 +247,7 @@ Only return JSON.
       .slice(0, 10); // Limit to top 10
 
     // Apply geo filtering
-    let finalDoctors = scoredDoctors.map(item => ({
+    let finalDoctors = scoredDoctors.map((item) => ({
       ...item,
       distanceInKm: null,
     }));
@@ -241,7 +261,7 @@ Only return JSON.
             spherical: true,
             maxDistance: 100000, // 100 km
             query: {
-              _id: { $in: scoredDoctors.map(d => d.doctor._id) },
+              _id: { $in: scoredDoctors.map((d) => d.doctor._id) },
             },
           },
         },
@@ -260,7 +280,7 @@ Only return JSON.
       ]);
 
       const geoMap = new Map(
-        geoResults.map(doc => [doc._id.toString(), doc.distanceInKm])
+        geoResults.map((doc) => [doc._id.toString(), doc.distanceInKm])
       );
 
       finalDoctors = scoredDoctors.map(({ doctor, score }) => ({
@@ -285,6 +305,7 @@ Only return JSON.
         score,
         distanceInKm,
       })),
+      firstAid: firstAidSuggestion || "No immediate advice available.",
     });
   } catch (error) {
     console.error("AI Integration Error:", error.message);
@@ -298,14 +319,16 @@ Only return JSON.
           { hospitalName: { $regex: text, $options: "i" } },
           { description: { $regex: text, $options: "i" } },
         ],
-      }).limit(10).exec();
+      })
+        .limit(10)
+        .exec();
 
       return res.status(200).json({
         success: true,
         fallback: true,
         query: text,
         count: fallbackDoctors.length,
-        doctors: fallbackDoctors.map(doc => ({
+        doctors: fallbackDoctors.map((doc) => ({
           ...doc.toObject(),
           score: null,
           distanceInKm: null,
