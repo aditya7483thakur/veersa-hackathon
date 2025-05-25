@@ -39,7 +39,6 @@ const AskAIScreen = () => {
         params.append('longitude', location.longitude.toString());
       }
 
-      console.log(params.toString())
 
       const response = await axios.get(`${process.env.EXPO_PUBLIC_BACKED_API_URL}/doctor/ask-ai?${params.toString()}`);
       const data = response.data;
@@ -47,7 +46,6 @@ const AskAIScreen = () => {
       const doctorsData = data.doctors || data || [];
       setDoctors(doctorsData);
       setHasSearched(true);
-      console.log("done")
       
     } catch (error) {
       console.error('Error searching doctors:', error);

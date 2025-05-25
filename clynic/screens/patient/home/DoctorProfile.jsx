@@ -16,7 +16,6 @@ const DoctorProfile = () => {
   const route = useRoute();
   const navigation = useNavigation();
   const { doctor } = route.params || {};
-  console.log(doctor);
 
   const handleBooking = () => {
     navigation.navigate("Schedule", {
