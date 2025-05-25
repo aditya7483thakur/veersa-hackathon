@@ -7,7 +7,7 @@ class AppointmentService {
   async cancelAppointment(appointmentId) {
     try {
       const response = await axios.delete(
-        `${BASE_URL}/appointment//cancel-appointment`,
+        `${BASE_URL}/appointment/cancel-appointment`,
         {
           params: {
             appointmentId: appointmentId,

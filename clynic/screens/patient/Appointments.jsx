@@ -5,6 +5,7 @@ import {
   ScrollView,
   ActivityIndicator,
   SafeAreaView,
+  Alert,
 } from "react-native";
 import Entypo from "@expo/vector-icons/Entypo";
 import { Colors } from "../../constants/Colors";
@@ -77,10 +78,11 @@ const AppointmentScreen = () => {
   const cancelAppointment = async (params) => {
     try {
       setLoading(true);
-      console.log(params);
       const response = await appointmentService.cancelAppointment(params);
+
       if (response.success) {
-        setDoctors(response.data);
+        Alert.alert("Success", "Appointment deleted successfully.");
+        fetchAppointments();
       }
     } catch (error) {
       console.error("Error deleting appointment:", error.message || error);
