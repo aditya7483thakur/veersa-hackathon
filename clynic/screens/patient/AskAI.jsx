@@ -9,13 +9,13 @@ import { useAuth } from '../../context/AuthContext';
 import axios from 'axios';
 
 const AskAIScreen = () => {
-  const {location, setLocation} = useAuth();
+  const { location, setLocation } = useAuth();
   const [locationLoading, setLocationLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [doctors, setDoctors] = useState([]);
   const [searchLoading, setSearchLoading] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
-
+  const [firstAid, setFirstAid] = useState("");
   // Replace with your actual API base URL
 
   const searchDoctors = async (query) => {
@@ -27,7 +27,7 @@ const AskAIScreen = () => {
 
     try {
       setSearchLoading(true);
-      
+
       // Build query parameters
       const params = new URLSearchParams({
         text: query.trim()
@@ -41,12 +41,11 @@ const AskAIScreen = () => {
 
 
       const response = await axios.get(`${process.env.EXPO_PUBLIC_BACKED_API_URL}/doctor/ask-ai?${params.toString()}`);
-      const data = response.data;
-
-      const doctorsData = data.doctors || data || [];
-      setDoctors(doctorsData);
+      const { doctors, firstAid } = response.data;
+      setFirstAid(firstAid)
+      setDoctors(doctors);
       setHasSearched(true);
-      
+
     } catch (error) {
       console.error('Error searching doctors:', error);
       Alert.alert('Search Error', 'Failed to search doctors. Please try again.');
@@ -73,7 +72,7 @@ const AskAIScreen = () => {
   };
 
   const renderDoctorItem = ({ item }) => (
-    <DoctorCard item={item} isAiCard={true}/>
+    <DoctorCard item={item} isAiCard={true} />
   );
 
   const renderEmptyComponent = () => {
@@ -129,7 +128,7 @@ const AskAIScreen = () => {
         <View className="px-6 pt-5 pb-4">
           <View className="flex-row justify-between items-center mb-6">
             <View className="flex-row items-center space-x-3">
-                         
+
             </View>
           </View>
 
@@ -169,6 +168,13 @@ const AskAIScreen = () => {
 
         {/* Results Section */}
         <View className="flex-1" style={{ backgroundColor: Colors.bgWhite(0.95) }}>
+          {firstAid && (
+            <View className="bg-blue-50 p-3 rounded-lg mx-4 mt-2">
+              <Text className="text-blue-800 font-medium">AI First-Aid Tip:</Text>
+              <Text className="text-blue-700">{firstAid}</Text>
+            </View>
+          )}
+
           <FlatList
             data={doctors}
             renderItem={renderDoctorItem}
