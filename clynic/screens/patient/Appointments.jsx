@@ -4,6 +4,7 @@ import {
   TouchableOpacity,
   ScrollView,
   ActivityIndicator,
+  SafeAreaView,
 } from "react-native";
 import Entypo from "@expo/vector-icons/Entypo";
 import { Colors } from "../../constants/Colors";
@@ -11,6 +12,7 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import { useAuth } from "../../context/AuthContext";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { Ionicons } from "@expo/vector-icons";
 
 // Skeleton Loading Component
 const AppointmentSkeleton = () => (
@@ -163,10 +165,10 @@ const AppointmentScreen = () => {
   }
 
   return (
-    <View className="flex-1 bg-gray-50 pb-10">
+    <SafeAreaView className="flex-1 bg-gray-50 pb-10">
       {/* Header */}
       <View
-        className="px-6 pt-12 pb-4 shadow-sm"
+        className="px-6 pt-5 pb-4 shadow-sm"
         style={{ backgroundColor: Colors.bgColor(1) }}
       >
         <View className="flex-row items-center justify-between">
@@ -177,14 +179,16 @@ const AppointmentScreen = () => {
             </Text>
           </View>
           <TouchableOpacity
-            className="bg-blue-50 p-3 rounded-full"
+            className="bg-blue-50 w-10 h-10 p-2 items-center justify-center rounded-full"
             onPress={handleRefresh}
             disabled={refreshing}
           >
             {refreshing ? (
               <ActivityIndicator size="small" color="#3B82F6" />
             ) : (
-              <Text className="text-blue-600 font-bold">↻</Text>
+              <Text className="text-blue-600 font-bold">
+                <Ionicons name="reload" size={15} color={Colors.bgColor(1)} />
+              </Text>
             )}
           </TouchableOpacity>
         </View>
@@ -262,7 +266,7 @@ const AppointmentScreen = () => {
           ))
         )}
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 

@@ -7,8 +7,8 @@ import {
  
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Colors } from '../../constants/Colors';
-import CustomButton from '../../components/CustomButton';
+import { Colors } from '../../../constants/Colors'; 
+import CustomButton from '../../../components/CustomButton'; 
 import { AntDesign } from "@expo/vector-icons";
 
 const DoctorProfile = () => {
