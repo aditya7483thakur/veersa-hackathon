@@ -15,7 +15,6 @@ router.get("/check-availability", auth, checkAvailability);
 
 router.get("/upcoming", auth, upcoming);
 
-router.get("/cancel", auth, cancel);
-
+router.delete("/cancel-appointment", cancel);
 
 export default router;
