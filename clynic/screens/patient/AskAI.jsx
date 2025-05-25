@@ -10,12 +10,11 @@ import axios from 'axios';
 
 const AskAIScreen = () => {
   const { location, setLocation } = useAuth();
-  const [locationLoading, setLocationLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [doctors, setDoctors] = useState([]);
   const [searchLoading, setSearchLoading] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
-  const [firstAid, setFirstAid] = useState("");
+  const [firstAid, setFirstAid] = useState([]);
   // Replace with your actual API base URL
 
   const searchDoctors = async (query) => {
@@ -42,7 +41,13 @@ const AskAIScreen = () => {
 
       const response = await axios.get(`${process.env.EXPO_PUBLIC_BACKED_API_URL}/doctor/ask-ai?${params.toString()}`);
       const { doctors, firstAid } = response.data;
-      setFirstAid(firstAid)
+      const bulletPoints = firstAid
+        .split(/(?<=[.?!])\s+/) // split by sentence endings
+        .filter(Boolean) // remove empty strings
+        .map(point => `• ${point.trim()}`)
+        .join('\n\n');
+
+      setFirstAid(bulletPoints); 
       setDoctors(doctors);
       setHasSearched(true);
 
@@ -168,12 +173,28 @@ const AskAIScreen = () => {
 
         {/* Results Section */}
         <View className="flex-1" style={{ backgroundColor: Colors.bgWhite(0.95) }}>
-          {firstAid && (
-            <View className="bg-blue-50 p-3 rounded-lg mx-4 mt-2">
-              <Text className="text-blue-800 font-medium">AI First-Aid Tip:</Text>
-              <Text className="text-blue-700">{firstAid}</Text>
+          {hasSearched&&firstAid && (
+            <View
+              className="bg-white mx-4 mt-4 mb-2 p-4 rounded-2xl shadow-sm"
+              style={{
+                shadowColor: Colors.black(0.1),
+                shadowOffset: { width: 0, height: 2 },
+                shadowOpacity: 0.1,
+                shadowRadius: 8,
+                elevation: 3,
+              }}
+            >
+              <Text className="text-base font-bold " style={{ color: Colors.bgColor(1) }}>
+                💡 AI First-Aid Tip
+              </Text>
+              <View className="ml-1">
+                <Text className="text-sm " style={{ color: Colors.black(0.7) }}>
+                  {firstAid}
+                </Text>
+              </View>
             </View>
           )}
+
 
           <FlatList
             data={doctors}
