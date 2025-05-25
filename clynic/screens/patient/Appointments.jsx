@@ -168,7 +168,7 @@ const AppointmentScreen = () => {
     <SafeAreaView className="flex-1 bg-gray-50 pb-10">
       {/* Header */}
       <View
-        className="px-6 pt-5 pb-4 shadow-sm"
+        className="px-6 pt-12 pb-4 shadow-sm"
         style={{ backgroundColor: Colors.bgColor(1) }}
       >
         <View className="flex-row items-center justify-between">
