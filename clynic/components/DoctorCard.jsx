@@ -22,6 +22,7 @@ const DoctorCard = ({ item, isAiCard = false }) => {
         shadowRadius: 8,
         elevation: 3,
       }}
+      activeOpacity={0.7}
       onPress={() => {
         if (isAiCard) {
           navigation.navigate("ExploreTabs", {
