@@ -2,7 +2,6 @@ import { View, Text, StatusBar, TouchableOpacity, ActivityIndicator, TextInput, 
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors } from '../../constants/Colors';
-import locationService from '../../services/locationService';
 import { Ionicons } from '@expo/vector-icons';
 import DoctorCard from '../../components/DoctorCard';
 import { useAuth } from '../../context/AuthContext';
@@ -65,11 +64,10 @@ const AskAIScreen = () => {
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       searchDoctors(searchQuery);
-    }, 500); // 500ms delay
+    }, 1500); // 1500ms delay
 
     return () => clearTimeout(timeoutId);
   }, [searchQuery, location]);
-
 
 
   const handleSearch = (text) => {
@@ -132,21 +130,26 @@ const AskAIScreen = () => {
       >
         <View className="px-6 pt-5 pb-4">
           <View className="flex-row justify-between items-center mb-6">
-            <View className="flex-row items-center space-x-3">
-
+            <View className="flex px-3 gap-2">
+              <Text className="text-2xl font-bold text-white tracking-wider">
+                AI consultation
+              </Text>
+              <Text className="text-sm text-white">
+                Get instant first-aid suggestions and best matches based on your query
+              </Text>
             </View>
           </View>
 
           {/* Search Bar */}
           <View
-            className="rounded-xl px-4 py-3 flex-row items-center"
+            className="rounded-xl px-4 py-1 flex-row items-center"
             style={{
               shadowColor: Colors.black(0.1),
               shadowOffset: { width: 0, height: 2 },
               shadowOpacity: 0.1,
               shadowRadius: 8,
               elevation: 3,
-              backgroundColor: Colors.bgWhite(0.95)
+              backgroundColor: Colors.bgWhite(0.9)
             }}
           >
             <Ionicons name="search" size={20} color={Colors.black(0.4)} />
@@ -173,7 +176,7 @@ const AskAIScreen = () => {
 
         {/* Results Section */}
         <View className="flex-1" style={{ backgroundColor: Colors.bgWhite(0.95) }}>
-          {hasSearched&&firstAid && (
+          {hasSearched && firstAid && (
             <View
               className="bg-white mx-4 mt-4 mb-2 p-4 rounded-2xl shadow-sm"
               style={{
