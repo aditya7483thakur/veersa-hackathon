@@ -39,7 +39,7 @@ const ExploreScreen = () => {
     sortBy: "fees",
     sortDirection: "desc",
   });
-
+  
   const { accessToken, logout } = useAuth();
 
   // Get user location
@@ -77,7 +77,7 @@ const ExploreScreen = () => {
   const searchDoctors = async (query = "", currentFilters = filters) => {
     try {
       setLoading(true);
-
+      
       const searchParams = {
         searchTerm: query,
         ...currentFilters,
@@ -112,11 +112,11 @@ const ExploreScreen = () => {
   // Handle search input
   const handleSearch = (text) => {
     setSearchQuery(text);
-
-    if (text.trim() === "") {
+    
+    if (text.trim() === '') {
       // If search is empty and no filters applied, show all doctors
-      const hasActiveFilters = Object.values(filters).some(
-        (value) => value !== null && value !== undefined && value !== ""
+      const hasActiveFilters = Object.values(filters).some(value => 
+        value !== null && value !== undefined && value !== ''
       );
 
       if (!hasActiveFilters) {
@@ -125,7 +125,9 @@ const ExploreScreen = () => {
         searchDoctors("", filters);
       }
     } else {
-      searchDoctors(text, filters);
+      
+        searchDoctors(text, filters);
+      
     }
   };
 
@@ -151,8 +153,8 @@ const ExploreScreen = () => {
 
   // Check if filters are active
   const hasActiveFilters = () => {
-    return Object.values(filters).some(
-      (value) => value !== null && value !== undefined && value !== ""
+    return Object.values(filters).some(value => 
+      value !== null && value !== undefined && value !== ''
     );
   };
 
@@ -219,7 +221,7 @@ const ExploreScreen = () => {
                 Your Health, Our Priority
               </Text>
             </View>
-
+            
             <View className="flex-row items-center gap-2">
               {/* Location Button */}
               <TouchableOpacity
@@ -298,7 +300,7 @@ const ExploreScreen = () => {
               />
             </TouchableOpacity>
           </View>
-
+          
           {/* Location Status */}
           {location && (
             <View className="flex-row items-center mt-2 px-2">
