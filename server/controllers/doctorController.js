@@ -156,7 +156,6 @@ export const filterDoctors = async (req, res) => {
 
 export const aiIntegrate = async (req, res) => {
   try {
-    console.log("Groq API Key:", process.env.GROQ_API_KEY);
     const text = req.query.text;
     const userLat = parseFloat(req.query.latitude);
     const userLon = parseFloat(req.query.longitude);

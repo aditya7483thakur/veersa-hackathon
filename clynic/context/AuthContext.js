@@ -104,7 +104,7 @@ const AuthProvider = ({ children }) => {
     console.log("Login error:", error);
 
     // Don't alert here — handle that in handleSubmit
-    throw error; // <-- Important: Let the caller handle it
+    throw error;
   }
 };
 

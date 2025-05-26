@@ -109,27 +109,7 @@ const ExploreScreen = () => {
     getUserLocation();
   }, []);
 
-  // Handle search input
-  const handleSearch = (text) => {
-    setSearchQuery(text);
-    
-    if (text.trim() === '') {
-      // If search is empty and no filters applied, show all doctors
-      const hasActiveFilters = Object.values(filters).some(value => 
-        value !== null && value !== undefined && value !== ''
-      );
 
-      if (!hasActiveFilters) {
-        fetchAllDoctors();
-      } else {
-        searchDoctors("", filters);
-      }
-    } else {
-      
-        searchDoctors(text, filters);
-      
-    }
-  };
 
   useEffect(() => {
     const timeout = setTimeout(() => {

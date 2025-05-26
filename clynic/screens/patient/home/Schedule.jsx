@@ -202,7 +202,7 @@ const AppointmentBooking = () => {
     await Notifications.scheduleNotificationAsync({
       content: {
         title: "Appointment Reminder",
-        body: `Your appointment with Dr. ${doctorName} is in 1 hour.`,
+        body: `Your appointment with ${doctorName} is in 1 hour.`,
         data: { url: mapsUrl }, // this will be used when tapping
       },
       trigger: triggerTime,
