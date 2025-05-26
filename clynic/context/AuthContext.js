@@ -18,9 +18,7 @@ const AuthProvider = ({ children }) => {
 
   const checkAuthStatus = async () => {
     try {
-      const accessToken = await SecureStore.getItemAsync(
-        process.env.EXPO_PUBLIC_ACCESS_TOKEN_SECRET
-      );
+      const accessToken = await SecureStore.getItemAsync(process.env.EXPO_PUBLIC_ACCESS_TOKEN_SECRET);
 
       if (accessToken) {
         axios.defaults.headers.common["Authorization"] =
